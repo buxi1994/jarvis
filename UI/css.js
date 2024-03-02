@@ -6,7 +6,7 @@ const css = `
     .jarvis {
         position: fixed;
         top: 2%;
-        left: 0px;
+        left: calc(100vw - 64px);
         width: 56px;
         transition: width 0.5s ease-out;
         display: flex;
@@ -82,6 +82,12 @@ const css = `
         &::-webkit-scrollbar {
             display: none;
         }
+        .loading{
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color:rgba(255,255,255,0.8);
+        }
         .user-question{
             display: flex;
             justify-content: flex-end;
@@ -150,6 +156,64 @@ const css = `
         margin-top: 12px;
         span{
             color: #858585;
+        }
+    }
+    .tools{
+        position:relative;
+        span{
+            margin-right:8px;
+            display: inline-block;
+            max-width: 56px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .status{
+            cursor:pointer;
+            background-repeat:no-repeat;
+            background-image: url(./images/arrow-up.png);
+            transition:background-image 0.6s;
+            border-radius:6px;
+            overflow:hidden;
+            background-color:#fff;
+            width: 20px;
+            height: 20px;
+            background-position: center;
+            background-size: cover;
+            margin-right:0;
+        }
+        .fixed-tools{
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            padding:0 5px;
+        }
+        &.open{
+            .open-tools{
+                display:flex;
+            }
+            .status{
+                background-image: url(./images/arrow-dowm.png);
+            }
+        }
+        .open-tools{
+            overflow: hidden;
+            max-height: 98px;
+            flex-wrap: wrap-reverse;
+            justify-content: flex-start;
+            position: absolute;
+            display: none;
+            background-color: rgba(0, 0, 0, 0.9);
+            box-shadow: 0px -3px 3px rgb(20 152 166);
+            right: 0;
+            bottom: 0;
+            padding: 10px 5px 25px;
+            z-index:0;
+            &>span{
+                margin-bottom:5px;
+            }
         }
     }
     .search{

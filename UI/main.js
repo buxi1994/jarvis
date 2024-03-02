@@ -1,8 +1,8 @@
 import css from "./css.js";
 import html from "./html.js";
 // https://www.jsdelivr.com/package/npm/markdown-it-emoji
-import markdownIt from 'https://cdn.jsdelivr.net/npm/markdown-it@14.0.0/+esm';
-import {full as emoji} from 'https://cdn.jsdelivr.net/npm/markdown-it-emoji@3.0.0/+esm';
+import markdownIt from "https://cdn.jsdelivr.net/npm/markdown-it@14.0.0/+esm";
+import { full as emoji } from "https://cdn.jsdelivr.net/npm/markdown-it-emoji@3.0.0/+esm";
 const md = new markdownIt({
   html: true, // 在源码中启用 HTML 标签
   xhtmlOut: true, // 使用 '/' 来闭合单标签 （比如 <br />）。
@@ -147,11 +147,10 @@ class Garvis extends HTMLElement {
           jarvis.classList.add("active");
           // 获取页面的有效区域大小
           const pageWidth = document.documentElement.clientWidth;
-          let left = jarvis.style.left;
-          if (left.substring(0, left.length - 2) > pageWidth / 2) {
+          if (jarvis.offsetLeft > pageWidth / 2) {
             jarvis.style.left = pageWidth - 340 + "px";
           } else {
-            jarvis.style.left = "20px";
+            jarvis.style.left = "10px";
           }
           jarvis.style.top = "2%";
         }
@@ -168,16 +167,24 @@ class Garvis extends HTMLElement {
         // 清空数据
         event.target.value = "";
         console.log("haha");
+
         const question =
           '<div class="user-question"><div>' + value + "</div></div>";
         shadow.getElementById("content").innerHTML += question;
-        this_.search(value).then((res) => {
-          const html = md.render(res);
-          content.innerHTML += "<div class='item-content'>" + html + "</div>";
-        }).catch(err=>{
-          const html = md.render(':zzz:服务器睡着了，请重试...');
-          content.innerHTML += "<div class='item-content'>" + html + "</div>";
-        });
+        this_
+          .search(value)
+          .then((res) => {
+            const loading = shadow.getElementById("loading");
+            loading.parentNode.removeChild(loading);
+            const html = md.render(res);
+            content.innerHTML += "<div class='item-content'>" + html + "</div>";
+          })
+          .catch((err) => {
+            const loading = shadow.getElementById("loading");
+            loading.parentNode.removeChild(loading);
+            const html = md.render(":zzz:服务器睡着了，请重试...");
+            content.innerHTML += "<div class='item-content'>" + html + "</div>";
+          });
       }
     });
     const content = shadow.getElementById("content");
@@ -197,11 +204,34 @@ class Garvis extends HTMLElement {
 
     // 开始观察目标节点
     observer.observe(shadow.getElementById("content"), config);
+
+    // 获取工具列表
+    const tools = this.getTools();
+    const fixedTools = shadow.getElementById("fixed-tools");
+    const openTools = shadow.getElementById("open-tools");
+    let dom = fixedTools;
+    for (let i = 0; i < tools.length; i++) {
+      const item = tools[i];
+      if (i == 4 && tools.length > 5) {
+        dom.innerHTML += `<span id="status" class="status"></span>`;
+        setTimeout(() => {
+          const status = shadow.getElementById("status");
+          status.onclick = () => this.triggleToolBtn();
+        }, 0);
+      } else {
+        if (i > 4) {
+          dom = openTools;
+        }
+        dom.innerHTML += `<span>${item}</span>`;
+      }
+    }
   }
   search() {
     return new Promise((resolve, reject) => {
+      let content = this.shadowRoot.getElementById("content");
+      content.innerHTML += "<div id='loading' class='loading'>——————  loading  ——————</div>";
       // 假设这是根据异步操作成功或失败的条件
-      let condition = true; 
+      let condition = true;
       setTimeout(() => {
         if (condition) {
           const res = `**以下是不同公司不同订单类型的相关介绍**
@@ -244,6 +274,48 @@ class Garvis extends HTMLElement {
       div += array;
     }
     return div;
+  }
+  triggleToolBtn() {
+    let dom = this.shadowRoot.getElementById("tools");
+    if (dom.classList.contains("open")) {
+      dom.classList.remove("open");
+    } else {
+      dom.classList.add("open");
+    }
+  }
+  getTools() {
+    return [
+      "大",
+      "发货时间",
+      "杜甫何如",
+      "二和",
+      "反击的空间",
+      "大花洒福",
+      "发货时间电话客服金夫人",
+      "杜甫何如的盒饭",
+      "电话费二和",
+      "反击的空间",
+      "大花洒福达合金",
+      "发货时间电话客服金夫人",
+      "杜甫何如的盒饭",
+      "电话费二",
+      "反击的空间",
+      "大花洒福达合金",
+      "发货时间",
+      "杜甫何如",
+      "电话费二和",
+      "反击的空间",
+      "大花洒福",
+      "发货时间电话客服金夫人",
+      "杜甫何如的盒饭",
+      "电话费二和",
+      "反击的空间",
+      "大花洒福达合金",
+      "发货时间电话客服金夫人",
+      "杜甫何如的盒饭",
+      "电话费二",
+      "反击的空间",
+    ];
   }
 }
 
