@@ -1,0 +1,21 @@
+1.数据库下载：https://dev.mysql.com/downloads/file/?id=526085
+
+ps: 此处需要配置环境变量，在Path中添加mysql的bin路径，比如：D:\code\mysql\mysql-8.3.0-winx64\software\bin
+ 
+2.数据库初始化命令如下
+mysqlld --initialize --console
+
+ps：此命令会随机生成一个密码，比如：
+2024-03-02T06:44:21.384615Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: <h#E+N/d;9,2
+其中密码就是：<h#E+N/d;9,2
+
+3.安装mysql命令（如果提示权限不足，那么你需要以管理员身份重新打开cmd）：
+mysqld -install
+
+4.启动数据库服务：
+net start mysql
+
+5.使用用户名密码登录：
+mysql -u root -p
+在回显提示后输入密码即可登录
+
