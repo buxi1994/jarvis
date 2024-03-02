@@ -19,3 +19,27 @@ net start mysql
 mysql -u root -p
 在回显提示后输入密码即可登录
 
+
+6.修改密码（非必须）
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'MagicMan@123';
+FLUSH PRIVILEGES;
+
+7.数据库建表语句：
+CREATE TABLE scene_url_info (  
+    id BIGINT NOT NULL AUTO_INCREMENT,  
+    scene_url VARCHAR(255) NOT NULL,  
+    scene_description TEXT,  
+    scene_key_word VARCHAR(255),  
+    recommended_url VARCHAR(255),  
+    recommended_name VARCHAR(255),  
+    recommended_type VARCHAR(50),  
+    creator VARCHAR(255),  
+    create_time BIGINT NOT NULL,  
+    PRIMARY KEY (id)  
+);
+
+CREATE INDEX idx_scene_url ON scene_url_info(scene_url);
+
+测试数据
+INSERT INTO scene_url_info (scene_url, scene_description, scene_key_word, recommended_url, recommended_name, recommended_type, creator, create_time)  
+VALUES ('https://example.com/test-scene', 'This is a test scene description', 'test keyword', 'https://example.com/recommended', 'Recommended Name', 'image', 'testUser', 1625079245);
