@@ -1,7 +1,7 @@
 const html = `
         <div id="jarvis" class="jarvis">
             <div class="icon">
-                <img src="./jarvis.jpg"/>
+                <img src="./images/jarvis.jpg"/>
             </div>
             <div id="modal" class="modal">
                 <div class="listContainer">
@@ -9,6 +9,12 @@ const html = `
                         <span>欢迎体验文档助手内测，作为一个人工智能语言模型，我可以回答你的问题，辅助你进行写作。</span>
                     </div>
                     <div id="content" class="content">
+                    </div>
+                    <div id="tools" class="tools">
+                        <div class="fixed-tools" id="fixed-tools">
+                        </div>
+                        <div id="open-tools" class="open-tools">
+                        </div>
                     </div>
                     <div class="search">
                         <div class="input">
