@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <localRepository>D:\devZgq\Java\.m2\repository</localRepository>
+
+  <!-- 阿里云的中央仓库 -->
+  <mirrors>  
+    <mirror>
+      <id>aliyun</id>
+      <name>aliyun</name>
+      <mirrorOf>central</mirrorOf> 
+      <url>https://maven.aliyun.com/repository/public</url>
+    </mirror> 
+<mirror>  
+  <id>alimaven</id>  
+  <name>aliyun maven</name>  
+  <url>http://maven.aliyun.com/nexus/content/groups/public/</url>  
+  <mirrorOf>central</mirrorOf>  
+</mirror>
+  </mirrors> 
+
+
+  <!-- 配置 jdk 版本 -->
+  <profiles> 
+ 
+    <profile>
+      <id>jdk8</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+        <jdk>8</jdk>
+      </activation>
+      <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+         <maven.compiler.target>8</maven.compiler.target>
+          <maven.compiler.compilerVersion>8</maven.compiler.compilerVersion>
+      </properties>
+    </profile>  
+
+  </profiles>
+
+</settings>
