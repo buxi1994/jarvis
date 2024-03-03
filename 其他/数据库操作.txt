@@ -2,12 +2,13 @@
 
 ps: 此处需要配置环境变量，在Path中添加mysql的bin路径，比如：D:\code\mysql\mysql-8.3.0-winx64\software\bin
  
-2.数据库初始化命令如下
-mysqlld --initialize --console
+2.CMD命令行执行（数据库初始化）命令如下：
+mysqld --initialize --console
 
 ps：此命令会随机生成一个密码，比如：
 2024-03-02T06:44:21.384615Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: <h#E+N/d;9,2
 其中密码就是：<h#E+N/d;9,2
++zE.mgZEe6b&
 
 3.安装mysql命令（如果提示权限不足，那么你需要以管理员身份重新打开cmd）：
 mysqld -install
@@ -25,6 +26,9 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY 'MagicMan@123';
 FLUSH PRIVILEGES;
 
 7.数据库建表语句：
+建表之前如果DB还没有需要建db： CREATE DATABASE magicmandb;
+然后切换到数据库：USE magicmandb;
+
 CREATE TABLE scene_url_info (  
     id BIGINT NOT NULL AUTO_INCREMENT,  
     scene_url VARCHAR(255) NOT NULL,  
