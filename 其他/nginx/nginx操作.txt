@@ -1,0 +1,9 @@
+1. 安装nginx
+拷贝安装包解压即可
+
+2. 启动nginx
+命令cd到nginx.exe目录下，使用如下命令：
+start nginx
+
+3. 重新加载
+./nginx -s reload
