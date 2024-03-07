@@ -6,8 +6,8 @@ import Chat from '@/components/Chat.vue';
 import Search from '@/components/Search.vue';
 import Icon from '@/components/Icon.vue';
 import Tools from '@/components/Tools.vue';
-import { chatAnswerStore } from '@/stores/store';
-const store = chatAnswerStore()
+import { chatAnswerStore } from '@/stores';
+const chatAnswerComStore = chatAnswerStore();
 // const tools = ref();
 const jarvis = ref();
 const content = ref();
@@ -54,8 +54,8 @@ async function searchFn(value) {
     chat.question = value;
     chats.value.push(chat);
     const index = chats.value.length-1;
-    await store.get();
-    let newChat = {question:chat.question,answer:store.answer};
+    await chatAnswerComStore.get();
+    let newChat = {question:chat.question,answer:chatAnswerComStore.answer};
     chats.value.splice(index,1,newChat);
 }
 </script>
@@ -265,3 +265,4 @@ async function searchFn(value) {
 //     }
 // }
 </style>
+@/stores

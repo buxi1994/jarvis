@@ -1,20 +1,21 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { toolsStore } from '@/stores';
+const toolsComStore = toolsStore();
 const tools = ref();
 let toolsList = ref();
 const fixedTools = ref([]);
 const openTools = ref([]);
 const isToolsOpen = ref(false);
 onMounted(() => {
-    toolsList.value = getTools();
-    formatTools(toolsList.value);
+    getTools();
 })
 function formatTools(toolsList) {
     let data = fixedTools;
     for (let i = 0; i < toolsList.length; i++) {
         const item = toolsList[i];
-        if (i != 4) {
-            if (i > 4) {
+        if (i != 3) {
+            if (i > 3) {
                 data = openTools;
             }
             data.value.push(item);
@@ -24,39 +25,15 @@ function formatTools(toolsList) {
 function triggleToolBtn() {
     isToolsOpen.value = !isToolsOpen.value;
 }
-function getTools() {
-    return [
-        "待办事项",
-        "发货时间",
-        "杜甫何如",
-        "二和",
-        "反击的空间",
-        "大花洒福",
-        "发货时间",
-        "甫何盒饭",
-        "电话二和",
-        "反击的空间",
-        "合金",
-        "客服人",
-        "杜甫何如的盒饭",
-        "电话费二",
-        "反击的空间",
-        "大花洒福达合金",
-        "发货时间",
-        "杜甫何如",
-        "电话费二和",
-        "反击的空间",
-        "大花洒福",
-        "发货",
-        "杜甫何如的盒饭",
-        "电话费二和",
-        "反击的空间",
-        "大花洒福达合金",
-        "发货时间电话客服金夫人",
-        "杜甫何如的盒饭",
-        "电话费二",
-        "反击的空间",
-    ];
+async function getTools() {
+    await toolsComStore.get();
+    debugger;
+    toolsList.value = formatTools(toolsComStore.tools);
+}
+function clickHandle(type,description) {
+    if (type == "link") {
+        window.open(description, '_blank');
+    }
 }
 </script>
 
@@ -64,14 +41,20 @@ function getTools() {
     <div id="tools" class="tools" :class="{ open: isToolsOpen }" ref="tools">
         <div class="content">
             <div class="fixed-tools" id="fixed-tools">
-                <span v-for="item in fixedTools">
-                    {{ item }}
-                </span>
+                <div class="tool-item" v-for="{name,imageUrl,type,description} in fixedTools" @click="clickHandle(type,description)">
+                    <img :src="imageUrl" />
+                    <span>
+                        {{ name }}
+                    </span>
+                </div> 
             </div>
             <div id="open-tools" class="open-tools">
-                <span v-for="item in openTools">
-                    {{ item }}
-                </span>
+                <div class="tool-item" v-for="{name,imageUrl,type,description} in openTools" @click="clickHandle(type,description)">
+                    <img :src="imageUrl" />
+                    <span>
+                        {{ name }}
+                    </span>
+                </div> 
             </div>
         </div>
         <span v-if="openTools.length > 0" class="status" @click="triggleToolBtn" />
@@ -85,16 +68,25 @@ function getTools() {
     display: flex;
     justify-content: space-between;
     margin-bottom: 5px;
-    padding:0 12px;
+    padding: 0 12px;
 
-    span {
+    .tool-item {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
         margin-right: 8px;
-        display: inline-block;
-        width: 60px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        line-height: 26px;
+        img{
+            width: 16px;
+            height: 16px;
+            margin-right: 3px;
+        }
+        span{
+            width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            line-height: 26px;
+        }
     }
 
     .status {
@@ -111,14 +103,14 @@ function getTools() {
         background-size: cover;
         position: relative;
         bottom: -5px;
-        margin:0;
+        margin: 0;
     }
 
     .fixed-tools {
         position: relative;
         z-index: 1;
         display: flex;
-        justify-content:flex-start;
+        justify-content: flex-start;
         align-items: center;
     }
 
@@ -133,7 +125,7 @@ function getTools() {
     }
 
     .content {
-       width: calc(100% - 20px); 
+        width: calc(100% - 20px);
     }
 
     .open-tools {
@@ -152,6 +144,7 @@ function getTools() {
         /* IE and Edge 隐藏滚动条*/
         -ms-overflow-style: none;
         scrollbar-width: none;
+
         &::-webkit-scrollbar {
             display: none;
         }

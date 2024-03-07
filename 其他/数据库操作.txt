@@ -9,6 +9,8 @@ ps：此命令会随机生成一个密码，比如：
 2024-03-02T06:44:21.384615Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: <h#E+N/d;9,2
 其中密码就是：<h#E+N/d;9,2
 +zE.mgZEe6b&
+ S4Sxpq!;a#2d
+S4Sxpq!;a#2d
 
 3.安装mysql命令（如果提示权限不足，那么你需要以管理员身份重新打开cmd）：
 mysqld -install

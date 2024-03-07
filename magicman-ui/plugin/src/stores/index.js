@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import http from '@/utils/request'
 
 export const chatAnswerStore = defineStore('chatAnswer', {
   state: () => ({ answer: '' }),
@@ -16,12 +17,26 @@ export const chatAnswerStore = defineStore('chatAnswer', {
             this.answer = res
             resolve(res) // 如果操作成功，调用resolve并传递成功的值
           } else {
-            let tips = ':zzz:服务器睡着了，请重试...';
-            this.answer = tips;
+            let tips = ':zzz:服务器睡着了，请重试...'
+            this.answer = tips
             resolve(tips) // 如果操作失败，调用reject并传递失败的原因
           }
         }, 3000)
       })
+    }
+  }
+})
+
+export const toolsStore = defineStore('toolsStore', {
+  state: () => ({ tools: [] }),
+  actions: {
+    async get(params) {
+      try {
+        const result = await http.get('http://localhost:8080/magicman/scene/toolsinfo', params);
+        this.tools = result.dataList;
+      } catch (error) {
+        this.tools = [];
+      }
     }
   }
 })
