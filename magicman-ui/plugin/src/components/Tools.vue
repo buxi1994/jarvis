@@ -27,7 +27,6 @@ function triggleToolBtn() {
 }
 async function getTools() {
     await toolsComStore.get();
-    debugger;
     toolsList.value = formatTools(toolsComStore.tools);
 }
 function clickHandle(type,description) {
@@ -64,24 +63,30 @@ function clickHandle(type,description) {
 <style lang="less" scoped>
 .tools {
     position: relative;
-    font-size: 13px;
+    font-size: 12px;
     display: flex;
     justify-content: space-between;
     margin-bottom: 5px;
     padding: 0 12px;
+    color:#222;
 
     .tool-item {
         cursor: pointer;
         display: flex;
         align-items: center;
         margin-right: 8px;
+        margin-top: 6px;
+        background: #fff;
+        border-radius: 8px;
+        outline: none;
+        padding: 3px;
         img{
             width: 16px;
             height: 16px;
-            margin-right: 3px;
+            margin-right: 6px;
         }
         span{
-            width: 60px;
+            width: 56px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -96,13 +101,12 @@ function clickHandle(type,description) {
         transition: background-image 0.6s;
         border-radius: 6px;
         overflow: hidden;
-        background-color: #fff;
         width: 20px;
-        height: 18px;
+        height: 30px;
         background-position: center;
         background-size: cover;
         position: relative;
-        bottom: -5px;
+        bottom: -8px;
         margin: 0;
     }
 
@@ -125,21 +129,21 @@ function clickHandle(type,description) {
     }
 
     .content {
-        width: calc(100% - 20px);
+        width: calc(100% - 12px);
     }
 
     .open-tools {
         overflow-y: auto;
-        max-height: 130px;
+        max-height: 114px;
         flex-wrap: wrap-reverse;
         justify-content: flex-start;
         position: absolute;
         display: none;
         background-color: rgba(0, 0, 0, 0.9);
-        box-shadow: 0px -2px 0px rgb(20 152 166);
+        box-shadow: 0px -1px 1px rgb(0, 0, 0, 0.6);
         right: 0;
-        bottom: 26px;
-        padding: 0 32px 0 12px;
+        bottom: 38px;
+        padding: 0 20px 0 12px;
         z-index: 0;
         /* IE and Edge 隐藏滚动条*/
         -ms-overflow-style: none;

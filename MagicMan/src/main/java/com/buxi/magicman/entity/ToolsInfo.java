@@ -1,5 +1,6 @@
 package com.buxi.magicman.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -10,7 +11,8 @@ import java.util.List;
 public class ToolsInfo {
     public static enum Type {
         action,
-        link
+        link,
+        recommend
     }
 
     @Data
@@ -20,6 +22,7 @@ public class ToolsInfo {
         private String description;
         private Type type;
         private String imageUrl;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
         private Timestamp createTime;
     }
 

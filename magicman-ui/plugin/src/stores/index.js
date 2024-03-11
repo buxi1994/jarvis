@@ -30,12 +30,29 @@ export const chatAnswerStore = defineStore('chatAnswer', {
 export const toolsStore = defineStore('toolsStore', {
   state: () => ({ tools: [] }),
   actions: {
-    async get(params) {
+    async get(params={}) {
       try {
-        const result = await http.get('http://localhost:8080/magicman/scene/toolsinfo', params);
+        params.type = "link,action";
+        const result = await http.get('http://localhost:8090/magicman/scene/toolsinfo', params);
         this.tools = result.dataList;
       } catch (error) {
         this.tools = [];
+      }
+    }
+  }
+})
+
+export const recommendStore = defineStore('recommendStore', {
+  state: () => ({ recommend: [] }),
+  actions: {
+    async get(params={}) {
+      try {
+        params.type = "recommend";
+        const result = await http.get('http://localhost:8090/magicman/scene/toolsinfo', params);
+        debugger;
+        this.recommend = result.dataList;
+      } catch (error) {
+        this.recommend = [];
       }
     }
   }

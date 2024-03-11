@@ -109,6 +109,8 @@
 				this.refresh();
 			},
 			column(){
+				// eslint-disable-next-line
+				debugger;
 				this.userColumn=this.column;
 			}
 		},
@@ -181,6 +183,12 @@
 					[config.request.pageSize]: this.scPageSize,
 					[config.request.prop]: this.prop,
 					[config.request.order]: this.order
+				}
+				if(!this.prop){
+					delete reqData[config.request.prop]
+				}
+				if(!this.order){
+					delete reqData[config.request.order]
 				}
 				if(this.hidePagination){
 					delete reqData[config.request.page]

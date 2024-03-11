@@ -1,13 +1,14 @@
 <script setup>
 // https://github.com/sxei/chrome-plugin-demo/tree/master/page-action-demo
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import javars from '@/assets/images/jarvis.jpg';
 import Chat from '@/components/Chat.vue';
 import Search from '@/components/Search.vue';
 import Icon from '@/components/Icon.vue';
 import Tools from '@/components/Tools.vue';
-import { chatAnswerStore } from '@/stores';
+import { chatAnswerStore, recommendStore } from '@/stores';
 const chatAnswerComStore = chatAnswerStore();
+const recommendComStore = recommendStore();
 // const tools = ref();
 const jarvis = ref();
 const content = ref();
@@ -17,18 +18,6 @@ const isActive = ref(false);
 // 页面展示数据
 let mainList = ref();
 onMounted(() => {
-    mainList.value = {
-        recommend: [
-            "查找相似问题",
-            "尝试修复问题",
-            "最近一周改动",
-            "建议解决方案",
-            "最近一个月改动",
-            "最新IT咨询",
-        ],
-        "你可能想了解：": ["value1", "value2", "value3"],
-        拓展: ["关于鼎汉技术分点讨论议题", "点讨论议题", "value3"],
-    };
     // 创建一个回调函数来接收变化通知
     const callback = function (mutationsList, observer) {
         console.log(mutationsList)
@@ -45,48 +34,60 @@ onMounted(() => {
     const config = { attributes: false, childList: true, subtree: false };
     // 开始观察目标节点
     observer.observe(content.value, config);
+    debugger;
+    recommendComStore.get();
+    // mainList.value = {
+    //     recommend: recommendsComStore.recommends,
+    // "你可能想了解：": ["value1", "value2", "value3"],
+    // 拓展: ["关于鼎汉技术分点讨论议题", "点讨论议题", "value3"],
+    // };
 })
+// watch(recommendComStore.recommend, (newValue, oldValue) => {
+//     mainList.value.recommend = newValue;
+// })
 function isShowModal(bool) {
-   isActive.value = bool; 
+    isActive.value = bool;
 }
 async function searchFn(value) {
     let chat = {};
     chat.question = value;
     chats.value.push(chat);
-    const index = chats.value.length-1;
+    const index = chats.value.length - 1;
     await chatAnswerComStore.get();
-    let newChat = {question:chat.question,answer:chatAnswerComStore.answer};
-    chats.value.splice(index,1,newChat);
+    let newChat = { question: chat.question, answer: chatAnswerComStore.answer };
+    chats.value.splice(index, 1, newChat);
+}
+function clickHandle(type, description) {
+    if (type == "recommend") {
+        window.open(description, '_blank');
+    }
 }
 </script>
 
 <template>
     <div id="jarvis" class="jarvis" :class="{ active: isActive }" ref="jarvis">
-        <Icon @trigger-modal="isShowModal" :jarvis="jarvis" :isActive="isActive"/>
+        <Icon @trigger-modal="isShowModal" :jarvis="jarvis" :isActive="isActive" />
         <div id="modal" class="modal">
             <div class="listContainer">
                 <div class="tips">
                     <span>欢迎体验文档助手内测，作为一个人工智能语言模型，我可以回答你的问题，辅助你进行写作。</span>
                 </div>
                 <div id="content" class="content" ref="content">
-                    <div v-if="mainList" class="item-content" v-for="key in Object.keys(mainList)">
-                        <template v-if="mainList[key].length > 0">
-                            <div v-if="key == 'recommend'" class="title">试试以下对话吧："</div>
-                            <div v-else class="title">{{ key }}</div>
-                            <div class="list">
-                                <template v-for="item in mainList[key]">
-                                    <div class="item">{{ item }}</div>
-                                </template>
-                            </div>
-                        </template>
+                    <div class="item-content" v-if="recommendComStore.recommend.length > 0">
+                        <div class="title">试试以下对话吧：</div>
+                        <div class="list">
+                            <template v-for="{ name, description } in recommendComStore.recommend">
+                                <div class="item" @click="clickHandle('recommend', description)">{{ name }}</div>
+                            </template>
+                        </div>
                     </div>
-                    <template v-for="{question,answer} in chats">
+                    <template v-for="{ question, answer } in chats">
                         <Chat :question="question" :answer="answer" />
                     </template>
                 </div>
             </div>
-            <Tools/>
-            <Search @trigger-search="searchFn"/>
+            <Tools />
+            <Search @trigger-search="searchFn" />
         </div>
     </div>
 </template>
@@ -97,7 +98,6 @@ async function searchFn(value) {
     top: 2%;
     left: calc(100vw - 64px);
     width: 56px;
-    transition: width 0.5s ease-out;
     display: flex;
     justify-content: right;
     flex-direction: column;
@@ -108,14 +108,18 @@ async function searchFn(value) {
     width: 320px;
 
     .modal {
-        display: block;
+        width: 100%;
+        height: fit-content;
     }
 }
+
 .modal {
-    display: none;
-    /* 初始时隐藏弹窗 */
+    display: block;
     position: relative;
-    width: 100%;
+    width: 0;
+    height: 0;
+    transition: width 0.5s ease-out, height 0.5s ease-out;
+    overflow: hidden;
     z-index: -1;
     top: -18px;
     background-color: rgba(0, 0, 0, 0.9);
@@ -127,7 +131,7 @@ async function searchFn(value) {
 }
 
 .listContainer {
-    padding: 28px 12px 12px;
+    padding: 28px 12px 6px;
     font-family: "arial";
     font-size: 12px;
 
@@ -185,8 +189,6 @@ async function searchFn(value) {
     }
 }
 
-
-
 .tips {
     font-family: PingFangSC-Regular;
     font-size: 12px;
@@ -198,71 +200,4 @@ async function searchFn(value) {
         color: #858585;
     }
 }
-
-// .tools {
-//     position: relative;
-
-//     span {
-//         margin-right: 8px;
-//         display: inline-block;
-//         max-width: 56px;
-//         overflow: hidden;
-//         text-overflow: ellipsis;
-//         white-space: nowrap;
-//     }
-
-//     .status {
-//         cursor: pointer;
-//         background-repeat: no-repeat;
-//         background-image: url(../assets/images/arrow-up.png);
-//         transition: background-image 0.6s;
-//         border-radius: 6px;
-//         overflow: hidden;
-//         background-color: #fff;
-//         width: 20px;
-//         height: 20px;
-//         background-position: center;
-//         background-size: cover;
-//         margin-right: 0;
-//     }
-
-//     .fixed-tools {
-//         position: relative;
-//         z-index: 1;
-//         display: flex;
-//         justify-content: space-between;
-//         margin-bottom: 5px;
-//         padding: 0 5px;
-//     }
-
-//     &.open {
-//         .open-tools {
-//             display: flex;
-//         }
-
-//         .status {
-//             background-image: url(../assets/images/arrow-dowm.png);
-//         }
-//     }
-
-//     .open-tools {
-//         overflow: hidden;
-//         max-height: 98px;
-//         flex-wrap: wrap-reverse;
-//         justify-content: flex-start;
-//         position: absolute;
-//         display: none;
-//         background-color: rgba(0, 0, 0, 0.9);
-//         box-shadow: 0px -3px 3px rgb(20 152 166);
-//         right: 0;
-//         bottom: 0;
-//         padding: 10px 5px 25px;
-//         z-index: 0;
-
-//         &>span {
-//             margin-bottom: 5px;
-//         }
-//     }
-// }
 </style>
-@/stores
