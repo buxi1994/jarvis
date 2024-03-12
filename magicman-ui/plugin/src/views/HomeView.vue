@@ -12,8 +12,6 @@ const content = ref();
 const searchContent = ref({});
 // 是否显示Modal
 const isActive = ref(false);
-// 页面展示数据
-let mainList = ref();
 onMounted(() => {
     // 创建一个回调函数来接收变化通知
     const callback = function (mutationsList, observer) {

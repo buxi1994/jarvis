@@ -16,14 +16,14 @@ function iconMousedownFn(e) {
     isDragging = false;
     dragStarted = true;
     console.log(
-        "mousedown---isDragging:" + isDragging + "---dragStarted:" + dragStarted
+        "触发鼠标按下事件---isDragging:" + isDragging + "---dragStarted:" + dragStarted
     );
     // 获取鼠标在元素内的初始位置
     let startX = e.clientX - props.jarvis.offsetLeft;
     let startY = e.clientY - props.jarvis.offsetTop;
     function mouseMoveHandler(e) {
         console.log(
-            "mouseMoveHandler---isDragging:" +
+            "触发鼠标移动事件---isDragging:" +
             isDragging +
             "---dragStarted:" +
             dragStarted
@@ -59,7 +59,7 @@ function iconMousedownFn(e) {
 
     function mouseUpHandler(e) {
         console.log(
-            "mouseUpHandler---isDragging:" +
+            "触发鼠标抬起事件---isDragging:" +
             isDragging +
             "---dragStarted:" +
             dragStarted
@@ -76,7 +76,7 @@ function iconMousedownFn(e) {
 }
 function iconClickFn(e) {
     console.log(
-        "click---isDragging:" + isDragging + "---dragStarted:" + dragStarted
+        "触发点击事件---isDragging:" + isDragging + "---dragStarted:" + dragStarted
     );
     if (isDragging) {
         e.preventDefault(); // 如果是拖拽操作，阻止click事件的默认行为

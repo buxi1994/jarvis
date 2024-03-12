@@ -120,7 +120,7 @@ function clickHandle(type,description) {
 
     &.open {
         .open-tools {
-            display: flex;
+            max-height: 114px;
         }
 
         .status {
@@ -133,12 +133,13 @@ function clickHandle(type,description) {
     }
 
     .open-tools {
+        transition: max-height 0.5s ease-out;
         overflow-y: auto;
-        max-height: 114px;
+        max-height: 0;
         flex-wrap: wrap-reverse;
         justify-content: flex-start;
         position: absolute;
-        display: none;
+        display: flex;
         background-color: rgba(0, 0, 0, 0.9);
         box-shadow: 0px -1px 1px rgb(0, 0, 0, 0.6);
         right: 0;
