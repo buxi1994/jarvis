@@ -80,7 +80,7 @@ async function searchFn(event) {
                 width: 36px;
 
                 &:before {
-                    background: url(https://edu-wenku.bdimg.com/v1/pc/aigc/presentation-sample/send-1702458556573.svg) no-repeat;
+                    background: url(../assets/images/send.png) no-repeat;
                     background-size: cover;
                     content: "";
                     height: 16px;

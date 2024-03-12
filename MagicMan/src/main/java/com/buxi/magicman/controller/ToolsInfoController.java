@@ -21,7 +21,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/magicman/scene")
 public class ToolsInfoController {
     @Autowired

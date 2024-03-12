@@ -1,18 +1,35 @@
 <script setup>
+import { watch, ref } from "vue";
 import Loading from "@/components/Loading.vue";
+import { useChatAnswerStore } from '@/stores';
 import md from "@/utils/md";
-const props = defineProps({
-    answer: String,
-    question: String
+const props = defineProps(['content']);
+const chatAnswerStore = useChatAnswerStore();
+const chats = ref([]);
+watch(() => props.content, (value, oldValue) => {
+    let chat = {};
+    chat.question = value.question;
+    chats.value.push(chat);
+    chatAnswerStore.get();
+})
+chatAnswerStore.$subscribe((mutation, state) => {
+    if (state.answer.length > 0) {
+        const index = chats.value.length - 1;
+        let chat = chats.value[index];
+        let newChat = { question: chat.question, answer: chatAnswerStore.answer };
+        chats.value.splice(index, 1, newChat);
+    }
 })
 </script>
 
 <template>
-    <div class="user-question">
-        <div>{{ question }}</div>
-    </div>
-    <Loading v-if="question && answer == undefined" />
-    <div v-else class="item-content" v-html="md.render(answer)" />
+    <template v-for="{ question, answer } in chats">
+        <div class="user-question">
+            <div>{{ question }}</div>
+        </div>
+        <Loading v-if="question && answer == undefined" />
+        <div v-else class="item-content" v-html="md.render(answer)" />
+    </template>
 </template>
 
 <style lang="less" scoped>

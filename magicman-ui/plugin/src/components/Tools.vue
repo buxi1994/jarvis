@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { toolsStore } from '@/stores';
-const toolsComStore = toolsStore();
+import { useToolsStore } from '@/stores';
+const toolsComStore = useToolsStore();
 const tools = ref();
 let toolsList = ref();
 const fixedTools = ref([]);
@@ -37,9 +37,9 @@ function clickHandle(type,description) {
 </script>
 
 <template>
-    <div id="tools" class="tools" :class="{ open: isToolsOpen }" ref="tools">
+    <div class="tools" :class="{ open: isToolsOpen }" ref="tools">
         <div class="content">
-            <div class="fixed-tools" id="fixed-tools">
+            <div class="fixed-tools">
                 <div class="tool-item" v-for="{name,imageUrl,type,description} in fixedTools" @click="clickHandle(type,description)">
                     <img :src="imageUrl" />
                     <span>
@@ -47,7 +47,7 @@ function clickHandle(type,description) {
                     </span>
                 </div> 
             </div>
-            <div id="open-tools" class="open-tools">
+            <div class="open-tools">
                 <div class="tool-item" v-for="{name,imageUrl,type,description} in openTools" @click="clickHandle(type,description)">
                     <img :src="imageUrl" />
                     <span>
