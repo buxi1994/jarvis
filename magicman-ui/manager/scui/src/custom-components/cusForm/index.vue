@@ -1,8 +1,8 @@
 <template>
     <el-dialog :title="titleMap[mode]" v-model="visible" :width="600" destroy-on-close
-        @closed="$emit('close-form-modal')">
+        @closed="cancelHandle">
         <sc-form ref="formref" :config="config" v-model="form" :loading="loading">
-            <el-button @click="visible = false">取 消</el-button>
+            <el-button @click="cancelHandle">取 消</el-button>
             <el-button type="primary" :loading="isSaveing" @click="submit()">保 存</el-button>
         </sc-form>
     </el-dialog>
@@ -44,6 +44,12 @@ export default {
         }
     },
     methods: {
+        cancelHandle(){
+            this.visible = false;
+            this.$emit("cancel-form-modal");
+            this.$refs.formref.resetFields();
+            this.isSaveing = false;
+        },
         //显示
         open(mode = 'add') {
             this.mode = mode;
@@ -65,7 +71,7 @@ export default {
                                 await this.apiObj.update(this.form);
                             }
                             this.isSaveing = false;
-                            this.$emit("close-form-modal");
+                            this.$emit("success-form-modal");
                             this.$refs.formref.resetFields();
                             this.visible = false;
                         } catch (error) {
@@ -93,6 +99,7 @@ export default {
                 this.form.name = data.name
                 this.form.imageUrl = data.imageUrl
                 this.form.description = data.description
+                this.form.relation = data.relation
             }
         }
     }

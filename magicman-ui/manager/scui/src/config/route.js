@@ -33,7 +33,8 @@ const routes = [
 					affix: true,
 				},
 				component: "tools/index",
-			},{
+			},
+			{
 				name: "recommend",
 				path: "/feature/recommend",
 				meta: {
@@ -42,36 +43,6 @@ const routes = [
 					affix: true,
 				},
 				component: "recommend/index",
-			}
-		],
-	},
-	{
-		name: "setting",
-		path: "/setting",
-		meta: {
-			title: "配置",
-			icon: "el-icon-setting",
-			type: "menu",
-		},
-		children: [
-			{
-				path: "/setting/user",
-				name: "user",
-				meta: {
-					title: "用户管理",
-					icon: "el-icon-user-filled",
-					type: "menu",
-				},
-				component: "setting/user",
-			},
-			{
-				path: "/setting/usercenter",
-				name: "userCenter",
-				meta: {
-					title: "帐号信息",
-					icon: "el-icon-user",
-				},
-				component: "userCenter",
 			},
 		],
 	},

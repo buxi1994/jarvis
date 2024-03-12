@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,29 +30,45 @@ public class ToolsInfoController {
 
     @GetMapping("/toolsinfo")
     // public ToolsInfo queryToolsInfo(@Param("page") int page,@Param("pageSize") int pageSize) {
-    public ToolsInfo queryToolsInfo(@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer pageSize,@RequestParam(required = true) String type) {
-        List<ToolsInfo.Item> list;
-        if (page != null && pageSize != null) {
-            int startIndex = (page-1)* pageSize;
-            list = toolsInfoMapper.queryAllToolsInfo(startIndex,pageSize,type);
+    public ToolsInfo queryToolsInfo(@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer pageSize,@RequestParam(required = true) String type,@RequestParam(required = false) String relation) throws MalformedURLException {
+        String newRelation = "";
+        if (relation != null) {
+            URL url = new URL(relation);
+            String authority = url.getAuthority();
+            String path = url.getPath();
+            newRelation = authority + path;
         }
         int total = toolsInfoMapper.queryAllToolsSummary(type);
-        list = toolsInfoMapper.queryAllToolsInfo(0,total,type);
+        if (page == null) {
+            page = 1;
+        }
+        if (pageSize == null) {
+            pageSize = total;
+        }
+        int startIndex = (page-1)* pageSize;
+        List<ToolsInfo.Item> list;
+        list = toolsInfoMapper.queryAllToolsInfo(startIndex,pageSize,type,newRelation);
+        if (list.size() == 0 && page != 1) {
+            page = 1;
+            list = toolsInfoMapper.queryAllToolsInfo(0,pageSize,type,newRelation);
+        }
         ToolsInfo toolsInfo = new ToolsInfo();
         toolsInfo.setDataList(list);
         toolsInfo.setTotal(total);
+        toolsInfo.setPage(page);
+        toolsInfo.setPageSize(pageSize);
         return toolsInfo;
     }
 
     @PostMapping("/add/tool")
     public boolean addTool(@RequestBody ToolsInfo.Item requestBody) {
         String imageUrl = requestBody.getImageUrl() != null ? requestBody.getImageUrl() : null;
-        return toolsInfoMapper.addTool(requestBody.getName(), requestBody.getDescription(), requestBody.getType(),imageUrl );
+        return toolsInfoMapper.addTool(requestBody.getName(), requestBody.getDescription(), requestBody.getType(),imageUrl,requestBody.getRelation() );
     }
 
     @PostMapping("/update/tool")
     public boolean updateTool(@RequestBody ToolsInfo.Item requestBody) {
-        return toolsInfoMapper.updateTool(requestBody.getName(), requestBody.getDescription(), requestBody.getType(), requestBody.getImageUrl(),requestBody.getId());
+        return toolsInfoMapper.updateTool(requestBody.getName(), requestBody.getDescription(), requestBody.getType(), requestBody.getImageUrl(),requestBody.getId(),requestBody.getRelation());
     }
 
     @DeleteMapping("/delete/tools")
@@ -102,6 +120,18 @@ public class ToolsInfoController {
             response.setMessage(UploadResponse.Code.SERVER_ERROR.getMessage());
             return response;
         }
+    }
+
+    @PostMapping("/delete/tool/icon")
+    public boolean deleteImage(@RequestParam("file") MultipartFile file) {
+        String uploadDir = "D:/resources/"; // Specify the directory where you want to save the uploaded images
+        String originalFileName = file.getOriginalFilename();
+        File imageFile = new File(uploadDir + originalFileName);
+        if (imageFile.exists()) {
+            imageFile.delete();
+            return true;
+        }
+        return false;
     }
 
     @GetMapping("/tools/images/{imageName}")

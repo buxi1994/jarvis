@@ -33,7 +33,7 @@
 				</template>
 			</scTable>
 		</el-main>
-		<form-dialog v-if="dialog.visible" :formItems="formItems" ref="formDialog" :apiObj="Api" @close-form-modal="closeFormModal" />
+		<form-dialog v-if="dialog.visible" :formItems="formItems" ref="formDialog" :apiObj="Api" @success-form-modal="successFormModal" @close-form-modal="cancelFormModal" />
 	</el-container>
 </template>
 
@@ -78,10 +78,13 @@ export default {
 		selectionChange(selection) {
 			this.selection = selection;
 		},
-		closeFormModal() {
+		successFormModal() {
+			this.cancelFormModal();
+			this.refreshTools();
+		},
+		cancelFormModal(){
 			console.log("do   closeFormModal");
 			this.dialog.visible = false;
-			this.refreshTools();
 		},
 		//删除(支持批量删除)
 		delTools() {

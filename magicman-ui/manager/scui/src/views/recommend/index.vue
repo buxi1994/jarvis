@@ -53,6 +53,18 @@ export default {
 					rules: [
 						{ required: true, message: "描述必填" }
 					],
+				},
+				{
+					label: "关联网址",
+					name: "relation",
+					value: "",
+					component: "input",
+					options: {
+						maxlength: "255",
+					},
+					rules: [
+						{ required: true, message: "网址必填" }
+					],
 				}
 			],
 			tableProps: [{
@@ -67,6 +79,10 @@ export default {
 				label: "类型",
 				width: 150,
 			}, {
+                prop: "relation",
+                label: "关联网址",
+                width: 250,
+            }, {
 				prop: "description",
 				label: "说明",
 				width: 250,

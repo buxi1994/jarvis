@@ -22,7 +22,7 @@ export default {
                         maxlength: "6",
                         placeholder: "工具名称",
                     },
-					rules: [
+                    rules: [
                         { required: true, message: "名称必填", trigger: "blur" }
                     ],
                 }, {
@@ -56,6 +56,18 @@ export default {
                     },
                     rules: [
                         { required: true, message: "描述必填" }
+                    ],
+                },
+                {
+                    label: "关联网址",
+                    name: "relation",
+                    value: "",
+                    component: "input",
+                    options: {
+                        maxlength: "255",
+                    },
+                    rules: [
+                        { required: true, message: "网址必填" }
                     ],
                 },
                 {
@@ -96,6 +108,10 @@ export default {
                     { text: 'link', value: 'link' },
                     { text: 'action', value: 'action' }
                 ],
+            }, {
+                prop: "relation",
+                label: "关联网址",
+                width: 250,
             }, {
                 prop: "description",
                 label: "说明",

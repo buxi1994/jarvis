@@ -221,8 +221,6 @@
 				})
 			},
 			request(param){
-				// eslint-disable-next-line
-				debugger;
 				var apiObj = config.apiObj;
 				if(this.apiObj){
 					apiObj = this.apiObj;

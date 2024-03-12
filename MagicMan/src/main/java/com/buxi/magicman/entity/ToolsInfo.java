@@ -22,12 +22,13 @@ public class ToolsInfo {
         private String description;
         private Type type;
         private String imageUrl;
+        private String relation;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
         private Timestamp createTime;
     }
 
     private int total;
-    private int page = 1;
-    private int pageSize = 20;
+    private int page;
+    private int pageSize;
     private List<Item> dataList;
 }

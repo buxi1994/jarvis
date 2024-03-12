@@ -33,6 +33,7 @@ export const useToolsStore = defineStore('tools', {
     async get(params={}) {
       try {
         params.type = "link,action";
+        params.relation = window.location.href;
         const result = await http.get('http://localhost:8090/magicman/scene/toolsinfo', params);
         this.tools = result.dataList;
       } catch (error) {
@@ -48,6 +49,7 @@ export const useRecommendStore = defineStore('recommend', {
     async get(params={}) {
       try {
         params.type = "recommend";
+        params.relation = window.location.href;
         const result = await http.get('http://localhost:8090/magicman/scene/toolsinfo', params);
         this.recommend = result.dataList;
       } catch (error) {
