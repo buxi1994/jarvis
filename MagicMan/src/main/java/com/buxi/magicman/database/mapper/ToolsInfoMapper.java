@@ -29,4 +29,7 @@ public interface ToolsInfoMapper {
 
     @Delete("DELETE FROM tools WHERE id IN (${idListStr})")
     boolean deleteTools(@Param("idListStr") String idListStr);
+
+    @Select("SELECT * FROM tools WHERE id IN (${idListStr})")
+    List<ToolsInfo.Item> willDeleteToolsInfo(@Param("idListStr") String idListStr);
 }

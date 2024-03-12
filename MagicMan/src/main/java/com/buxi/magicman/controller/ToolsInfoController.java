@@ -18,9 +18,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 @RestController
 @RequestMapping("/magicman/scene")
@@ -76,7 +77,18 @@ public class ToolsInfoController {
         String idListStr = idList.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(","));
-        return toolsInfoMapper.deleteTools(idListStr);
+        List<ToolsInfo.Item> items = toolsInfoMapper.willDeleteToolsInfo(idListStr);
+        boolean deleted = toolsInfoMapper.deleteTools(idListStr);
+        if (deleted) {
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            executorService.execute(()->{
+                for (int i = 0; i < items.size(); i++) {
+                    this.deleteImage(items.get(i).getImageUrl());
+                }
+            });
+            executorService.shutdown();
+        }
+        return deleted;
     }
 
     @PostMapping("/upload/tool/icon")
@@ -123,10 +135,14 @@ public class ToolsInfoController {
     }
 
     @PostMapping("/delete/tool/icon")
-    public boolean deleteImage(@RequestParam("file") MultipartFile file) {
-        String uploadDir = "D:/resources/"; // Specify the directory where you want to save the uploaded images
-        String originalFileName = file.getOriginalFilename();
-        File imageFile = new File(uploadDir + originalFileName);
+    public boolean deleteImage(@RequestParam String url) {
+        String uploadDir = "D:/resources/";
+        int lastIndex = url.lastIndexOf("/");
+        if (lastIndex == -1) {
+            return false;
+        }
+        String name = url.substring(lastIndex+1);
+        File imageFile = new File(uploadDir + name);
         if (imageFile.exists()) {
             imageFile.delete();
             return true;
