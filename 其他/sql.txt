@@ -1,0 +1,24 @@
+CREATE DATABASE magicmandb
+USE magicmandb
+
+CREATE TABLE tools (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name TEXT,
+    description TEXT,
+    type ENUM('link', 'action') NOT NULL,
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE tools ADD image_url VARCHAR(255) DEFAULT 'http://localhost:890//magicman/scene/tools/images/504d9bf4-8fd8-4f06-a098-4ad74cd6df56.png'
+
+ALTER TABLE tools ADD relation VARCHAR(255) DEFAULT 'http://localhost:5173/';
+
+UPDATE tools
+SET image_url = 'http://localhost:8090//magicman/scene/tools/images/504d9bf4-8fd8-4f06-a098-4ad74cd6df56.png'
+
+ALTER TABLE tools
+MODIFY create_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+ALTER TABLE tools
+MODIFY type ENUM('link', 'action','recommend') NOT NULL;
