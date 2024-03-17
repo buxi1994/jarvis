@@ -62,7 +62,7 @@ function searchFn(value) {
 .jarvis {
     position: fixed;
     top: 2%;
-    left: calc(100vw - 64px);
+    left: calc(100vw - 84px);
     width: 56px;
     display: flex;
     justify-content: right;

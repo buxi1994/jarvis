@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "浮动窗口插件",
+    "name": "Magic Man",
     "version": "1.0",
     "description": "在浏览器右侧悬浮一个窗口",
     "permissions": [  

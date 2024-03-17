@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import javars from '@/assets/images/jarvis.jpg';
 const emit = defineEmits(['triggerModal'])
-const props = defineProps(['jarvis','isActive']);
+const props = defineProps(['jarvis', 'isActive']);
 const icon = ref();
 onMounted(() => {
     icon.value.addEventListener("mousedown", iconMousedownFn);
@@ -83,19 +83,24 @@ function iconClickFn(e) {
         console.log(1);
         isDragging = false; // 重置拖拽状态
     } else {
+        // 获取页面的有效区域大小
+        const pageWidth = document.documentElement.clientWidth;
         console.log(2);
         if (props.isActive) {
-            emit('triggerModal',false);
+            const left = 132 + props.jarvis.offsetLeft;
+            emit('triggerModal', false);
+            props.jarvis.style.left = left + "px";
         } else {
-            emit('triggerModal',true);
-            // 获取页面的有效区域大小
-            const pageWidth = document.documentElement.clientWidth;
-            if (props.jarvis.offsetLeft > pageWidth / 2) {
+            const left =  props.jarvis.offsetLeft - 132 ;
+            emit('triggerModal', true);
+            const overRight = pageWidth - (props.jarvis.offsetLeft + 320);
+            if (overRight < 20) {
                 props.jarvis.style.left = pageWidth - 340 + "px";
-            } else {
-                props.jarvis.style.left = "10px";
+            }else if(props.jarvis.offsetLeft < 20){
+                props.jarvis.style.left = "20px";
+            }else {
+                props.jarvis.style.left = left + "px";
             }
-            props.jarvis.style.top = "2%";
         }
     }
 }
@@ -103,7 +108,7 @@ function iconClickFn(e) {
 
 <template>
     <div class="icon" ref="icon">
-        <img :src="javars" />
+        <img src="https://localhost:8090/magicman-ui/plugin/dist/assets/jarvis.jpg" />
     </div>
 </template>
 
