@@ -31,33 +31,48 @@ export default {
 		name: "工具",
 		get: async function(params){
 			params.type = "link,action";
-			return await http.get("http://localhost:8090/magicman/scene/toolsinfo", params);
+			return await http.get("https://localhost:8090/magicman/scene/toolsinfo", params);
 		},
 		add: async function(params){
-			return await http.post("http://localhost:8090/magicman/scene/add/tool", params);
+			return await http.post("https://localhost:8090/magicman/scene/add/tool", params);
 		},
 		update:async function(params){
-			return await http.post("http://localhost:8090/magicman/scene/update/tool", params);
+			return await http.post("https://localhost:8090/magicman/scene/update/tool", params);
 		},
 		delete: async function(params){
-			return await http.delete("http://localhost:8090/magicman/scene/delete/tools", params);
+			return await http.delete("https://localhost:8090/magicman/scene/delete/tools", params);
 		},
 	},
 	recommend: {
 		name: "推荐",
 		get: async function(params){
 			params.type = "recommend";
-			return await http.get("http://localhost:8090/magicman/scene/toolsinfo", params);
+			return await http.get("https://localhost:8090/magicman/scene/toolsinfo", params);
 		},
 		add: async function(params){
-			return await http.post("http://localhost:8090/magicman/scene/add/tool", params);
+			return await http.post("https://localhost:8090/magicman/scene/add/tool", params);
 		},
 		update:async function(params){
-			return await http.post("http://localhost:8090/magicman/scene/update/tool", params);
+			return await http.post("https://localhost:8090/magicman/scene/update/tool", params);
 		},
 		delete: async function(params){
-			return await http.delete("http://localhost:8090/magicman/scene/delete/tools", params);
+			return await http.delete("https://localhost:8090/magicman/scene/delete/tools", params);
 		},
+	},
+	feedback: {
+		name: "反馈",
+		get: async function(params){
+			return await http.get("https://localhost:8090/magicman/scene/feedback/info", params);
+		},
+		add: async function(params){
+			return await http.post("https://localhost:8090/magicman/scene/submit/feedback", params);
+		},
+		update:async function(params){
+			return await http.post("https://localhost:8090/magicman/scene/update/feedback", params);
+		},
+		// delete: async function(params){
+		// 	return await http.delete("https://localhost:8090/magicman/scene/delete/tools", params);
+		// },
 	},
 	menu: {
 		url: `${config.API_URL}/demo/menu`,

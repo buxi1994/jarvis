@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import cusTable from "@/custom-components/cusTable/index.vue";
+import cusTable from "./components/table.vue";
 
 export default {
     components: {
@@ -73,18 +73,25 @@ export default {
                 {
                     label: "图标",
                     component: "upload",
+                    name:"icon",
                     options: {
                         items: [
                             {
                                 label: "工具图标",
                                 name: "imageUrl",
                                 value: "",
+                                cropper: true,
+                                compress: 1,
+                                aspectRatio: 1,
+                                rules: [
+                                    { required: true, message: "图标必填" }
+                                ]
                             }
                         ]
                     },
                     rules: [
                         { required: true }
-                    ],
+                    ]
                 }
             ],
             tableProps: [{
@@ -105,9 +112,13 @@ export default {
                 type: "filter",
                 width: 150,
                 typeFilters: [
-                    { text: 'link', value: 'link' },
-                    { text: 'action', value: 'action' }
+                    { text: '链接', value: 'link' },
+                    { text: '动作', value: 'action' }
                 ],
+                options:{
+                    "link":"链接",
+                    "action":"动作"
+                }
             }, {
                 prop: "relation",
                 label: "关联网址",

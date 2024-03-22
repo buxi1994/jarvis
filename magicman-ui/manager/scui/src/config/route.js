@@ -32,7 +32,7 @@ const routes = [
 					icon: "el-icon-box",
 					affix: true,
 				},
-				component: "tools/index",
+				component: "feature/tools",
 			},
 			{
 				name: "recommend",
@@ -42,10 +42,42 @@ const routes = [
 					icon: "el-icon-medal",
 					affix: true,
 				},
-				component: "recommend/index",
+				component: "feature/recommend",
 			},
 		],
 	},
+	{
+		name: "feedback",
+		path: "/feedback",
+		meta: {
+			title: "反馈",
+			icon: "el-icon-mouse",
+			type: "menu",
+		},
+		children: [
+			{
+				name: "list",
+				path: "/feedback/list",
+				meta: {
+					title: "反馈列表",
+					icon: "el-icon-document",
+					affix: true,
+				},
+				component: "feedback/list",
+			},
+			{
+				name: "feedbackForm",
+				path: "/feedback/form",
+				meta: {
+					title: "意见反馈",
+					icon: "el-icon-edit",
+					affix: true,
+				},
+				component: "feedback/form",
+				props: true
+			},
+		]
+	}
 ];
 
 export default routes;

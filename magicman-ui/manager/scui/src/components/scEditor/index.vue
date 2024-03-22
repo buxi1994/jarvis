@@ -81,7 +81,7 @@
 					height: this.height,
 					placeholder: this.placeholder,
 					branding: false,
-					resize: true,
+					resize: true, 
 					elementpath: true,
 					content_style: "",
 					templates: this.templates,
@@ -92,8 +92,11 @@
 					image_advtab: true,
 					convert_urls: false,
 					images_upload_handler: function(blobInfo) {
+						alert(123);
 						return new Promise((resolve, reject) => {
 							const data = new FormData();
+							// eslint-disable-next-line
+							debugger;
 							data.append("file", blobInfo.blob() ,blobInfo.filename());
 							API.common.upload.post(data).then((res) => {
 								resolve(res.data.src)

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import cusTable from "@/custom-components/cusTable/index.vue";
+import cusTable from "./components/table.vue";
 
 export default {
 	components: {

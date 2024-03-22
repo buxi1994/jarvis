@@ -123,7 +123,7 @@ public class ToolsInfoController {
             response.setCode(UploadResponse.Code.SUCCESS.getCode());
             response.setMessage(UploadResponse.Code.SUCCESS.getMessage());
             UploadResponse.Data data = new UploadResponse.Data();
-            data.setSrc("http://localhost:8090//magicman/scene/tools/images/" + uniqueFileName);
+            data.setSrc("https://localhost:8090//magicman/scene/tools/images/" + uniqueFileName);
             data.setFileName(uniqueFileName);
             response.setData(data);
             return response;
