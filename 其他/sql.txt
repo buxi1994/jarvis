@@ -22,3 +22,25 @@ MODIFY create_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAM
 
 ALTER TABLE tools
 MODIFY type ENUM('link', 'action','recommend') NOT NULL;
+
+
+
+------------------------------feedback----------------------------------------------
+
+CREATE TABLE feedback (
+   id BIGINT NOT NULL AUTO_INCREMENT,
+   title TEXT NOT NULL,
+   creator BIGINT NOT NULL,
+   description TEXT,
+   status ENUM('pending', 'defer','done') NOT NULL,
+   create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+   comment TEXT,
+   PRIMARY KEY (id)
+);
+
+ALTER TABLE feedback MODIFY creator TEXT NOT NULL;
+ALTER TABLE feedback ADD editor varchar(20);
+ALTER TABLE feedback MODIFY comment varchar(255);
+ALTER TABLE feedback MODIFY title varchar(50) not null;
+ALTER TABLE feedback MODIFY creator varchar(20);
+ALTER TABLE feedback MODIFY status ENUM('pending', 'defer','done') NOT NULL DEFAULT 'pending';
