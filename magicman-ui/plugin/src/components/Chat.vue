@@ -1,34 +1,45 @@
 <script setup>
 import { watch, ref } from "vue";
 import Loading from "@/components/Loading.vue";
+import { storeToRefs } from 'pinia'
 import { useChatAnswerStore } from '@/stores';
 import md from "@/utils/md";
 const props = defineProps(['content']);
 const chatAnswerStore = useChatAnswerStore();
+const { getChatAnswer, editStatus,reset } = chatAnswerStore;
+const { chatAnswer, chatStatus } = storeToRefs(chatAnswerStore);
 const chats = ref([]);
 watch(() => props.content, (value, oldValue) => {
     let chat = {};
     chat.question = value.question;
     chats.value.push(chat);
-    chatAnswerStore.get();
+    editStatus("pending")
+    getChatAnswer();
 })
 chatAnswerStore.$subscribe((mutation, state) => {
-    if (state.answer.length > 0) {
+    if (chatStatus.value == "done") {
+        setTimeout(() => {
+            reset();
+        }, 0);
+    }
+    if (chatAnswer.value.length > 0) {
         const index = chats.value.length - 1;
         let chat = chats.value[index];
-        let newChat = { question: chat.question, answer: chatAnswerStore.answer };
+        let newChat = { question: chat.question, answer: md.render(chatAnswer.value), status: chatStatus.value };
         chats.value.splice(index, 1, newChat);
     }
 })
 </script>
 
 <template>
-    <template v-for="{ question, answer } in chats">
+    <el-icon style="width: 1em; height: 1em; margin-right: 8px"><Loading /></el-icon>
+    <template v-for="({ question, answer, status }, index) in chats" :key="index">
+        {{ index + 1 == chats.length && question && answer == '' }}
         <div class="user-question">
             <div>{{ question }}</div>
         </div>
-        <Loading v-if="question && answer == undefined" />
-        <div v-else class="item-content" v-html="md.render(answer)" />
+        <div v-if="answer && answer.length>0" class="item-content" v-html="answer" />
+        <!-- <Loading :curStatus="status" /> -->
     </template>
 </template>
 

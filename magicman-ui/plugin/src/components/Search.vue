@@ -1,10 +1,38 @@
 <script setup>
-import { ref } from 'vue';
-const emit = defineEmits(['triggerSearch'])
+import { ref, computed } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useChatAnswerStore } from '@/stores';
+import { ElMessage } from 'element-plus'
+import 'element-plus/es/components/message/style/css'
+import Loading from '../assets/images/Loading.vue';
+const chatAnswerStore = useChatAnswerStore();
+const { chatStatus } = storeToRefs(chatAnswerStore);
 const textarea = ref();
-async function searchFn(event) {
+const emit = defineEmits(['triggerSearch']);
+function searchFn(event) {
+    console.log(JSON.stringify(event.type));
+    // 点击，才能触发暂停。回车不可以触发暂停
+    if (event.type == "click") {
+        // loading状态可以暂停
+        if (chatStatus.value == "loading") {
+            chatAnswerStore.stopChatAnswer();
+            return;
+        }
+    }
+    // 未输入内容，不可以执行；
+    if (textarea.value.value.trim().length <= 0) {
+        return;
+    }
+    // pending状态，不可以再次触发
+    if (chatStatus.value != "done") {
+        ElMessage({
+            message: '当前对话进行中.',
+            type: 'warning',
+        })
+        return;
+    }
     event.preventDefault();
-    emit("triggerSearch",textarea.value.value);
+    emit("triggerSearch", textarea.value.value);
     // 清空数据
     textarea.value.value = "";
 }
@@ -16,7 +44,16 @@ async function searchFn(event) {
             <textarea ref="textarea" @keyup.enter="searchFn" placeholder="小助手最新黑科技：AI辅助生成PPT，输入&quot;/&quot;选取功能快速体验"
                 autocomplete="off" class="input" style="text-indent: 0px;"></textarea>
             <div class="send-bottom" @click="searchFn">
-                <div class="send-bottom-btn"></div>
+                <div class="send-bottom-btn">
+                    <el-icon color="#fff" :class="chatStatus == 'pending' ? 'is-loading' : ''">
+                        <!-- 请求已发，但未响应 -->
+                        <Loading v-if="chatStatus == 'pending'" />
+                        <!-- 请求已响应，但未结束 -->
+                        <VideoPause v-else-if="chatStatus == 'loading'" />
+                        <!-- 无请求||请求响应结束，可以继续发送请求 -->
+                        <Promotion v-else="chatStatus == 'done'" />
+                    </el-icon>
+                </div>
             </div>
         </div>
     </div>
@@ -76,19 +113,9 @@ async function searchFn(event) {
                 background: linear-gradient(316deg, #0bd3e7 16.71%, #15c393 116.53%);
                 border-radius: 8px;
                 height: 26px;
+                line-height: 26px;
                 position: relative;
                 width: 36px;
-
-                &:before {
-                    background: url(../assets/images/send.png) no-repeat;
-                    background-size: cover;
-                    content: "";
-                    height: 16px;
-                    position: absolute;
-                    top: 50%;
-                    transform: translate(-50%, -50%);
-                    width: 16px;
-                }
             }
         }
     }

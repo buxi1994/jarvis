@@ -34,7 +34,8 @@ function isShowModal(bool) {
 function searchFn(value) {
     searchContent.value = {
         question: value,
-        time: new Date().getTime()
+        time: new Date().getTime(),
+        status: "pending"
     }
 }
 </script>
