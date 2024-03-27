@@ -34,7 +34,6 @@ chatAnswerStore.$subscribe((mutation, state) => {
 <template>
     <el-icon style="width: 1em; height: 1em; margin-right: 8px"><Loading /></el-icon>
     <template v-for="({ question, answer, status }, index) in chats" :key="index">
-        {{ index + 1 == chats.length && question && answer == '' }}
         <div class="user-question">
             <div>{{ question }}</div>
         </div>

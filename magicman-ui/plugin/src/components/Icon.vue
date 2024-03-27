@@ -1,115 +1,113 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted, computed, nextTick } from 'vue';
 import javars from '@/assets/images/jarvis.jpg';
-const emit = defineEmits(['triggerModal'])
+import { debounce } from '@/utils';
+
+const emit = defineEmits(['triggerModal']);
 const props = defineProps(['jarvis', 'isActive']);
 const icon = ref();
-onMounted(() => {
-    icon.value.addEventListener("mousedown", iconMousedownFn);
-    icon.value.addEventListener("click", iconClickFn);
+let dragStarted = false; // 标记拖拽
+let preventClick = false; // 阻止click事件
+let lastX = 0;
+let lastY = 0;
+const x = ref(0);
+const y = ref(0);
+let rafId = null;
+let offsetRange = {};
+
+const calOffsetRange = () => {
+    // 获取页面的有效区域大小
+    const pageWidth = document.documentElement.clientWidth;
+    const pageHeight = document.documentElement.clientHeight;
+
+    // 获取jarvis图标的大小
+    const elementWidth = props.jarvis.offsetWidth;
+    const elementHeight = props.jarvis.offsetHeight;
+    const elementLeft = props.jarvis.offsetLeft;
+    const elementTop = props.jarvis.offsetTop;
+    const extra = 10;
+
+    // 计算边界
+    const left = 0 - elementLeft + extra;
+    const right = pageWidth - elementLeft - elementWidth - extra;
+    const top = 0 - elementTop + extra;
+    const bottom = pageHeight - elementTop - elementHeight;
+
+    offsetRange = { left, right, top, bottom }
+    finalXY(x.value, y.value);
+}
+watch(() => props.jarvis, (value, oldValue) => {
+    if (props.jarvis) {
+        calOffsetRange();
+    }
+})
+watch([x, y], () => {
+    rafId = requestAnimationFrame(updatePosition);
 })
 
-let isDragging = false; // 初始化拖拽状态
-let dragStarted = false; // 标记拖拽
-function iconMousedownFn(e) {
-    e.preventDefault();
-    isDragging = false;
+const finalXY = (newX, newY) => {
+    x.value = Math.min(Math.max(newX, offsetRange.left), offsetRange.right);
+    y.value = Math.min(Math.max(newY, offsetRange.top), offsetRange.bottom);
+}
+
+const mouseMoveHandler = (event) => {
+    if (!dragStarted) return;
+    preventClick = true;
+    const deltaX = event.clientX - lastX;
+    const deltaY = event.clientY - lastY;
+    // 计算新的位置
+    let newX = x.value + deltaX;
+    let newY = y.value + deltaY;
+
+    finalXY(newX, newY);
+
+    lastX = event.clientX;
+    lastY = event.clientY;
+}
+
+const updatePosition = () => {
+    props.jarvis.style.transform = `translate(${x.value}px,${y.value}px)`;
+}
+
+const iconMousedownFn = (event) => {
+    preventClick = false;
     dragStarted = true;
-    console.log(
-        "触发鼠标按下事件---isDragging:" + isDragging + "---dragStarted:" + dragStarted
-    );
     // 获取鼠标在元素内的初始位置
-    let startX = e.clientX - props.jarvis.offsetLeft;
-    let startY = e.clientY - props.jarvis.offsetTop;
-    function mouseMoveHandler(e) {
-        console.log(
-            "触发鼠标移动事件---isDragging:" +
-            isDragging +
-            "---dragStarted:" +
-            dragStarted
-        );
-        if (!dragStarted) return;
-        isDragging = true;
-        // 计算新的位置
-        let newX = e.clientX - startX;
-        let newY = e.clientY - startY;
-
-        // 获取页面的有效区域大小
-        const pageWidth = document.documentElement.clientWidth;
-        const pageHeight = document.documentElement.clientHeight;
-
-        // 获取元素的大小
-        const elementWidth = props.jarvis.offsetWidth;
-        const elementHeight = props.jarvis.offsetHeight;
-
-        // 计算边界
-        const minX = 0;
-        const maxX = pageWidth - elementWidth;
-        const minY = 0;
-        const maxY = pageHeight - elementHeight;
-
-        // 确保元素不会移出页面的有效区域
-        newX = Math.min(Math.max(newX, minX), maxX);
-        newY = Math.min(Math.max(newY, minY), maxY);
-
-        // 更新元素位置
-        props.jarvis.style.left = newX + "px";
-        props.jarvis.style.top = newY + "px";
-    }
-
-    function mouseUpHandler(e) {
-        console.log(
-            "触发鼠标抬起事件---isDragging:" +
-            isDragging +
-            "---dragStarted:" +
-            dragStarted
-        );
-        e.preventDefault();
-        dragStarted = false;
-        // 移除事件监听
-        document.removeEventListener("mousemove", mouseMoveHandler);
-        document.removeEventListener("mouseup", mouseUpHandler);
-    }
+    lastX = event.clientX;
+    lastY = event.clientY;
     // 添加事件监听
     document.addEventListener("mousemove", mouseMoveHandler);
-    document.addEventListener("mouseup", mouseUpHandler);
+    document.addEventListener("mouseup", mouseUpHandler, { once: true });
+    // event.stopPropagation();
 }
-function iconClickFn(e) {
-    console.log(
-        "触发点击事件---isDragging:" + isDragging + "---dragStarted:" + dragStarted
-    );
-    if (isDragging) {
-        e.preventDefault(); // 如果是拖拽操作，阻止click事件的默认行为
-        console.log(1);
-        isDragging = false; // 重置拖拽状态
+const mouseUpHandler = (e) => {
+    dragStarted = false;
+    cancelAnimationFrame(rafId);
+    // 移除事件监听
+    document.removeEventListener("mousemove", mouseMoveHandler);
+}
+const iconClickFn = (e) => {
+    if (preventClick) {
+        // 重置
+        preventClick = false;
     } else {
-        // 获取页面的有效区域大小
-        const pageWidth = document.documentElement.clientWidth;
-        console.log(2);
-        if (props.isActive) {
-            const left = 132 + props.jarvis.offsetLeft;
-            emit('triggerModal', false);
-            props.jarvis.style.left = left + "px";
-        } else {
-            const left =  props.jarvis.offsetLeft - 132 ;
-            emit('triggerModal', true);
-            const overRight = pageWidth - (props.jarvis.offsetLeft + 320);
-            if (overRight < 20) {
-                props.jarvis.style.left = pageWidth - 340 + "px";
-            }else if(props.jarvis.offsetLeft < 20){
-                props.jarvis.style.left = "20px";
-            }else {
-                props.jarvis.style.left = left + "px";
-            }
-        }
+        emit('triggerModal', !props.isActive);
+        setTimeout(() => {
+            calOffsetRange();
+        }, 400);
     }
 }
+onMounted(() => {
+    window.addEventListener('resize', calOffsetRange);
+})
+onUnmounted(() => {
+    mouseUpHandler();
+    window.removeEventListener('resize', calOffsetRange);
+});
 </script>
 
 <template>
-    <div class="icon" ref="icon">
-        <img src="https://localhost:8090/magicman-ui/plugin/dist/assets/jarvis.jpg" />
-    </div>
+    <div class="icon" ref="icon" @click="iconClickFn" @mousedown.prevent="iconMousedownFn" />
 </template>
 
 <style lang="less" scoped>
@@ -123,6 +121,14 @@ function iconClickFn(e) {
     align-items: center;
     cursor: pointer;
     animation: glow 2s infinite alternate;
+
+    &::after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        background-image: url(../assets/images/jarvis.jpg);
+        background-size: cover;
+    }
 }
 
 @keyframes glow {
