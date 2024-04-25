@@ -1,7 +1,6 @@
 <script setup>
 // https://github.com/sxei/chrome-plugin-demo/tree/master/page-action-demo
 import { ref, onMounted, watch } from 'vue';
-import javars from '@/assets/images/jarvis.jpg';
 import Chat from '@/components/Chat.vue';
 import Search from '@/components/Search.vue';
 import Icon from '@/components/Icon.vue';
@@ -60,6 +59,8 @@ function searchFn(value) {
 </template>
 
 <style lang="less" scoped>
+@import '@/assets/styles/variables.less';
+
 .jarvis {
     -webkit-user-select: none;
     /* Safari */
@@ -77,6 +78,7 @@ function searchFn(value) {
     justify-content: right;
     flex-direction: column;
     align-items: center;
+    font-family: @font-family
 }
 
 .jarvis.active {
@@ -97,17 +99,15 @@ function searchFn(value) {
     overflow: hidden;
     z-index: -1;
     top: -18px;
-    background-color: rgba(0, 0, 0, 0.9);
-    border-top-left-radius: 30px;
-    border-bottom-right-radius: 30px;
-    box-shadow: 4px 4px 1px 0 #4fecfc;
-    color: #4fecfc;
+    background-color: rgba(249, 251, 250, 0.9);
+    border-radius: 30px;
+    box-shadow: 0px 0px 2px 2px @primary-color;
+    color: @primary-color;
     padding-bottom: 12px;
 }
 
 .listContainer {
-    padding: 28px 12px 6px;
-    font-family: "arial";
+    padding: 28px 12px 0;
     font-size: 12px;
 
     .content {
@@ -125,7 +125,6 @@ function searchFn(value) {
 }
 
 .tips {
-    font-family: PingFangSC-Regular;
     font-size: 12px;
     line-height: 18px;
     margin-bottom: 10px;

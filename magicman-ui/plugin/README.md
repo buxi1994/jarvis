@@ -33,3 +33,8 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### element-plus图标使用参考
+##### 目前项目中使用自动导入方式
+1. http://element-plus.org/zh-CN/component/icon.html
+2. https://github.com/sxzz/element-plus-best-practices/blob/db2dfc983ccda5570033a0ac608a1bd9d9a7f658/src/App.vue

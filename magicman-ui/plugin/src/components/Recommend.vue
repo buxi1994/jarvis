@@ -24,6 +24,7 @@ function clickHandle(type, description) {
 </template>
 
 <style lang="less" scoped>
+@import '@/assets/styles/variables.less';
 .item-content {
     color: #666;
     background-color: #fff;
@@ -32,16 +33,18 @@ function clickHandle(type, description) {
     box-sizing: border-box;
     margin-bottom: 16px;
     overflow: hidden;
-    padding: 12px 16px 16px;
+    padding: 8px 10px;
+    box-shadow: 0px 0px 0px 2px @primary-color;
+    margin: 2px 2px 16px;
 
     &:last-child {
-        margin-bottom: 0;
+        margin-bottom: 2px;
     }
 
     .title {
         color: #999;
         font-size: 13px;
-        padding: 10px 0;
+        padding: 6px 0 10px;
         line-height: 22px;
     }
 
@@ -56,7 +59,7 @@ function clickHandle(type, description) {
         justify-content: flex-start;
         margin-bottom: 12px;
         max-width: none;
-        padding: 12px 13px;
+        padding: 10px 13px;
         position: relative;
         width: auto;
         word-break: break-all;

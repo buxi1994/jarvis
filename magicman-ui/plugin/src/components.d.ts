@@ -8,9 +8,18 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Chat: typeof import('./components/Chat.vue')['default']
+    Dialog: typeof import('./components/Dialog.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElDialog: typeof import('element-plus/es')['ElDialog']
     ElIcon: typeof import('element-plus/es')['ElIcon']
+    ElSpace: typeof import('element-plus/es')['ElSpace']
     Icon: typeof import('./components/Icon.vue')['default']
+    IEpAim: typeof import('~icons/ep/aim')['default']
+    IEpClose: typeof import('~icons/ep/close')['default']
+    IEpFullScreen: typeof import('~icons/ep/full-screen')['default']
+    IEpLoading: typeof import('~icons/ep/loading')['default']
+    IEpPromotion: typeof import('~icons/ep/promotion')['default']
+    IEpVideoPause: typeof import('~icons/ep/video-pause')['default']
     Loading: typeof import('./components/Loading.vue')['default']
     Recommend: typeof import('./components/Recommend.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

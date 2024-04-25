@@ -1,6 +1,5 @@
 <script setup>
 import { ref, watch, onMounted, computed, nextTick } from 'vue';
-import javars from '@/assets/images/jarvis.jpg';
 import { debounce } from '@/utils';
 
 const emit = defineEmits(['triggerModal']);
@@ -14,6 +13,8 @@ const x = ref(0);
 const y = ref(0);
 let rafId = null;
 let offsetRange = {};
+const iconOffset = ref(0);
+const jarvisWidth = ref(56);
 
 const calOffsetRange = () => {
     // 获取页面的有效区域大小
@@ -21,7 +22,7 @@ const calOffsetRange = () => {
     const pageHeight = document.documentElement.clientHeight;
 
     // 获取jarvis图标的大小
-    const elementWidth = props.jarvis.offsetWidth;
+    const elementWidth = jarvisWidth.value;
     const elementHeight = props.jarvis.offsetHeight;
     const elementLeft = props.jarvis.offsetLeft;
     const elementTop = props.jarvis.offsetTop;
@@ -34,13 +35,18 @@ const calOffsetRange = () => {
     const bottom = pageHeight - elementTop - elementHeight;
 
     offsetRange = { left, right, top, bottom }
-    finalXY(x.value, y.value);
+    finalXY(x.value + iconOffset.value, y.value);
 }
 watch(() => props.jarvis, (value, oldValue) => {
     if (props.jarvis) {
         calOffsetRange();
     }
 })
+watch(() => props.isActive, (value, oldValue) => {
+    console.log(value+","+oldValue);
+    calOffsetRange();
+})
+
 watch([x, y], () => {
     rafId = requestAnimationFrame(updatePosition);
 })
@@ -91,10 +97,17 @@ const iconClickFn = (e) => {
         // 重置
         preventClick = false;
     } else {
-        emit('triggerModal', !props.isActive);
-        setTimeout(() => {
-            calOffsetRange();
-        }, 400);
+        const status = !props.isActive;
+        if (status) {
+            // 即将展开
+            iconOffset.value = -160 + 28;
+            jarvisWidth.value = 320;
+        } else {
+            // 即将关闭
+            iconOffset.value = 160 - 28;
+            jarvisWidth.value = 56;
+        }
+        emit('triggerModal', status);
     }
 }
 onMounted(() => {
@@ -126,7 +139,7 @@ onUnmounted(() => {
         content: "";
         width: 100%;
         height: 100%;
-        background-image: url(../assets/images/jarvis.jpg);
+        background-image: url(../assets/images/ai.png);
         background-size: cover;
     }
 }

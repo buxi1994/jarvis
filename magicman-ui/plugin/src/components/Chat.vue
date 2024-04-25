@@ -32,7 +32,6 @@ chatAnswerStore.$subscribe((mutation, state) => {
 </script>
 
 <template>
-    <el-icon style="width: 1em; height: 1em; margin-right: 8px"><Loading /></el-icon>
     <template v-for="({ question, answer, status }, index) in chats" :key="index">
         <div class="user-question">
             <div>{{ question }}</div>
@@ -43,13 +42,15 @@ chatAnswerStore.$subscribe((mutation, state) => {
 </template>
 
 <style lang="less" scoped>
+@import '@/assets/styles/variables.less'; 
+
 .user-question {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 16px;
 
     div {
-        background-color: #15a1af;
+        background-color: @primary-color;
         border-radius: 12px;
         border-top-right-radius: 0;
         box-sizing: border-box;
@@ -70,14 +71,15 @@ chatAnswerStore.$subscribe((mutation, state) => {
     color: #666;
     background-color: #fff;
     border-radius: 10px;
+    box-shadow: 0px 0px 0px 2px @primary-color;
     border-top-left-radius: 0;
     box-sizing: border-box;
-    margin-bottom: 16px;
+    margin: 0 2px 16px;
     overflow: hidden;
-    padding: 12px 16px 16px;
+    padding: 8px 10px;
 
     &:last-child {
-        margin-bottom: 0;
+        margin-bottom: 2px;
     }
 
     .title {

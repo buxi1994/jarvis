@@ -47,11 +47,11 @@ function searchFn(event) {
                 <div class="send-bottom-btn">
                     <el-icon color="#fff" :class="chatStatus == 'pending' ? 'is-loading' : ''">
                         <!-- 请求已发，但未响应 -->
-                        <Loading v-if="chatStatus == 'pending'" />
+                        <i-ep-loading v-if="chatStatus == 'pending'" />
                         <!-- 请求已响应，但未结束 -->
-                        <VideoPause v-else-if="chatStatus == 'loading'" />
+                        <i-ep-video-pause v-else-if="chatStatus == 'loading'"/>
                         <!-- 无请求||请求响应结束，可以继续发送请求 -->
-                        <Promotion v-else="chatStatus == 'done'" />
+                        <i-ep-promotion v-else="chatStatus == 'done'"/>
                     </el-icon>
                 </div>
             </div>
@@ -60,8 +60,10 @@ function searchFn(event) {
 </template>
 
 <style lang="less" scoped>
+@import '@/assets/styles/variables.less';
+
 .search {
-    background-image: linear-gradient(90deg, #1c77ff, #4cecfc);
+    background-image: linear-gradient(90deg, @secondary-color, @primary-color);
     border-radius: 12px;
     box-shadow: 0 0 12px 0 rgba(0, 155, 109, .15);
     box-sizing: border-box;
@@ -88,7 +90,7 @@ function searchFn(event) {
             overflow-y: auto;
             width: 100%;
             font-size: 14px;
-            height: 62px;
+            height: 43px;
             resize: none;
             /* IE and Edge 隐藏滚动条*/
             -ms-overflow-style: none;
@@ -110,12 +112,14 @@ function searchFn(event) {
             .send-bottom-btn {
                 cursor: pointer;
                 text-align: center;
-                background: linear-gradient(316deg, #0bd3e7 16.71%, #15c393 116.53%);
+                background: linear-gradient(316deg, @primary-color 16.71%, @primary-color 116.53%);
                 border-radius: 8px;
                 height: 26px;
-                line-height: 26px;
-                position: relative;
                 width: 36px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                justify-content: center;
             }
         }
     }

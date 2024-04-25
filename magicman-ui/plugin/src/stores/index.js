@@ -26,8 +26,8 @@ export const useChatAnswerStore = defineStore('chatAnswer', () => {
     editStatus('done')
   }
   async function stopChatAnswer() {
-    await sleep(1000);
-    editStatus('reload');
+    await sleep(1000)
+    editStatus('reload')
   }
   function editStatus(value) {
     chatStatus.value = value
@@ -36,27 +36,26 @@ export const useChatAnswerStore = defineStore('chatAnswer', () => {
     chatAnswer.value += value
   }
   function reset() {
-    chatAnswer.value = "";
-    chatStatus.value = "done";
+    chatAnswer.value = ''
+    chatStatus.value = 'done'
   }
-  return { chatAnswer, chatStatus, getChatAnswer, editStatus, stopChatAnswer,reset }
+  return { chatAnswer, chatStatus, getChatAnswer, editStatus, stopChatAnswer, reset }
 })
 
 // TODO setup
-export const useToolsStore = defineStore('tools', {
-  state: () => ({ tools: [] }),
-  actions: {
-    async get(params = {}) {
-      try {
-        params.type = 'link,action'
-        params.relation = window.location.href
-        const result = await http.get('https://localhost:8090/magicman/scene/toolsinfo', params)
-        this.tools = result.dataList
-      } catch (error) {
-        this.tools = []
-      }
+export const useToolsStore = defineStore('tools', () => {
+  const tools = ref([]);
+  async function getToolInfo(params={}) {
+    try {
+      params.type = 'link,action'
+      params.relation = window.location.href
+      const result = await http.get('https://localhost:8090/magicman/scene/toolsinfo', params)
+      tools.value = result.dataList
+    } catch (error) {
+      tools.value = []
     }
   }
+  return { tools, getToolInfo }
 })
 
 // TODO setup
