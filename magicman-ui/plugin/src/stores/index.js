@@ -47,7 +47,7 @@ export const useToolsStore = defineStore('tools', () => {
   const tools = ref([]);
   async function getToolInfo(params={}) {
     try {
-      params.type = 'link,action'
+      params.type = 'link,modal'
       params.relation = window.location.href
       const result = await http.get('https://localhost:8090/magicman/scene/toolsinfo', params)
       tools.value = result.dataList

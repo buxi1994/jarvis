@@ -1,9 +1,11 @@
-body {
+html,body {
   margin: 0;
   font-family: 'PingFang SC', Arial, 'Helvetica Neue', Helvetica, 'Microsoft YaHei', '微软雅黑',
   'Hiragino Sans GB', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  padding: 0;
 }
 
 code {

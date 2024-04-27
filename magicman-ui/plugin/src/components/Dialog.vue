@@ -42,41 +42,51 @@ onMounted(() => {
 </script>
 
 <template>
-    <el-dialog v-model="visible" :fullscreen="fullscreen" :show-close="false" width="800">
-        <template #header="{ close, titleId, titleClass }">
-            <div class="my-header">
-                <div :id="titleId" :class="titleClass">待更新 。。。</div>
-                <el-space size="8">
-                    <i-ep-full-screen v-if="!fullscreen" @click="fullscreen = true" />
-                    <i-ep-aim v-if="fullscreen" @click="fullscreen = false" />
-                    <i-ep-close @click="close" />
-                </el-space>
-            </div>
-        </template>
-        <div id="ai_modal_content" class="ai-modal-content"></div>
-    </el-dialog>
+    <div class="ai-modal">
+        <el-dialog v-model="visible" :fullscreen="fullscreen" :show-close="false" width="800">
+            <template #header="{ close, titleId, titleClass }">
+                <div class="my-header">
+                    <div :id="titleId" :class="titleClass">待更新 。。。</div>
+                    <el-space size="8">
+                        <i-ep-full-screen v-if="!fullscreen" @click="fullscreen = true" />
+                        <i-ep-aim v-if="fullscreen" @click="fullscreen = false" />
+                        <i-ep-close @click="close" />
+                    </el-space>
+                </div>
+            </template>
+            <div id="ai_modal_content" class="ai-modal-content"></div>
+        </el-dialog>
+    </div>
 </template>
 
 <style lang="less" scoped>
 @import '@/assets/styles/variables.less';
+.ai-modal {
+    .my-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 16px;
+    }
 
-.my-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 16px;
-}
+    .ai-modal-content::-webkit-scrollbar {
+        display: none;
+    }
 
-.ai-modal-content::-webkit-scrollbar {
-    display: none;
-}
+    .ai-modal-content {
+        overflow: auto;
+        /* Standard */
+        width: 100%;
+        height: 100%;
+        border: 0;
+        scrollbar-width: none;
+    }
 
-.ai-modal-content {
-    overflow: auto;
-    /* Standard */
-    width: 100%;
-    max-height: 50vh;
-    border: 0;
-    scrollbar-width: none;
+    :deep(.el-dialog.is-fullscreen) {
+        .el-dialog__body {
+            height: 90%;
+            overflow: auto;
+        }
+    }
 }
 </style>

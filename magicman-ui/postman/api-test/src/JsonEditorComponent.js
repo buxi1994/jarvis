@@ -29,7 +29,7 @@ const JsonEditorComponent = ({ json }) => {
     }
   }, [json]);
 
-  return <div style={{maxHeight:"100%"}} ref={editorRef}></div>;
+  return <div style={{height:"80%"}} ref={editorRef}></div>;
 };
 
 export default JsonEditorComponent;

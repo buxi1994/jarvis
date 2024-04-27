@@ -142,7 +142,7 @@ function ApiComponent() {
   };
 
   return (
-    <Row style={{maxHeight:"100%",padding:"10px 20px"}}>
+    <Row style={{padding:"10px 20px",height:"calc(100% - 20px)"}}>
       <Col span={11}>
         <h2>Request:</h2>
         <div style={{ marginBottom: 16 }}>
