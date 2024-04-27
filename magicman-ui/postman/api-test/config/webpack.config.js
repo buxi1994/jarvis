@@ -16,6 +16,7 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const mergeAndIncludeGlobally = require('webpack-merge-and-include-globally');
 const paths = require('./paths');
 const modules = require('./modules');
 const getClientEnvironment = require('./env');
@@ -208,14 +209,12 @@ module.exports = function (webpackEnv) {
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
-      filename: isEnvProduction
-        ? 'static/js/[name].[contenthash:8].js'
-        : isEnvDevelopment && 'static/js/bundle.js',
+      filename: 'bundle.js',
       // There are also additional JS chunk files if you use code splitting.
-      chunkFilename: isEnvProduction
-        ? 'static/js/[name].[contenthash:8].chunk.js'
-        : isEnvDevelopment && 'static/js/[name].chunk.js',
-      assetModuleFilename: 'static/media/[name].[hash][ext]',
+      // chunkFilename: isEnvProduction
+      //   ? '[name].chunk.js'
+      //   : isEnvDevelopment && '[name].chunk.js',
+      // assetModuleFilename: '[name].[ext]',
       // webpack uses `publicPath` to determine where the app is being served from.
       // It requires a trailing slash, or the file assets will get an incorrect path.
       // We inferred the "public path" (such as / or /my-project) from homepage.
@@ -248,8 +247,17 @@ module.exports = function (webpackEnv) {
     optimization: {
       minimize: isEnvProduction,
       minimizer: [
+        // new mergeAndIncludeGlobally({
+        //   files: [
+        //     {
+        //       src: ['./src/**/*.js'],
+        //       dest: 'merged.js', // Output file name
+        //     }
+        //   ]
+        // }),
         // This is only used in production mode
         new TerserPlugin({
+          // parallel: false,
           terserOptions: {
             parse: {
               // We want terser to parse ecma 8 code. However, we don't want it
@@ -291,6 +299,13 @@ module.exports = function (webpackEnv) {
         // This is only used in production mode
         new CssMinimizerPlugin(),
       ],
+      splitChunks: {
+        chunks: 'all',
+        name: 'main', // 强制所有chunks使用同一个名称
+        minChunks: Infinity, // 禁用自动分割
+        cacheGroups: { default: false }
+      },
+      runtimeChunk: false, // Disable the creation of a separate runtime chunk.
     },
     resolve: {
       // This allows you to set a fallback for where webpack should look for modules.
@@ -393,7 +408,7 @@ module.exports = function (webpackEnv) {
                 {
                   loader: require.resolve('file-loader'),
                   options: {
-                    name: 'static/media/[name].[hash].[ext]',
+                    name: '[name].[ext]',
                   },
                 },
               ],
@@ -625,8 +640,8 @@ module.exports = function (webpackEnv) {
         new MiniCssExtractPlugin({
           // Options similar to the same options in webpackOptions.output
           // both options are optional
-          filename: 'static/css/[name].[contenthash:8].css',
-          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+          filename: '[name].css',
+          chunkFilename: '[name].chunk.css',
         }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding
@@ -747,6 +762,14 @@ module.exports = function (webpackEnv) {
             },
           },
         }),
+      // isEnvProduction && new mergeAndIncludeGlobally({
+      //     files: [
+      //       {
+      //         src: ['./src/**/*.js'],
+      //         dest: 'abc.js'
+      //       }
+      //     ]
+      //   })
     ].filter(Boolean),
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter

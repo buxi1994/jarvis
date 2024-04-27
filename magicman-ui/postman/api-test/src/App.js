@@ -1,9 +1,10 @@
 import './App.css';
+import ApiComponent from "./ApiComponent";
 
 function App() {
   return (
-    <div>你好</div>
+    <ApiComponent/>
   );
-}
+} 
 
 export default App;
