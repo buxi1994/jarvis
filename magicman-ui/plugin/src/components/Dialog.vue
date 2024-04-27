@@ -5,11 +5,40 @@ import 'element-plus/es/components/dialog/style/css';
 const props = defineProps(['closeHandle']);
 const visible = ref(true);
 const fullscreen = ref(false);
+const loadJsRef = ref();
+const loadCssRef = ref();
 watch(visible, (value, oldValue) => {
     if (!value) {
         props.closeHandle();
+        document.body.removeChild(loadJsRef.value);
+        document.head.removeChild(loadCssRef.value);
     }
 })
+
+function loadJS(url) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+    document.body.appendChild(script);
+    // 返回script元素，以便可以删除
+    return script;
+}
+
+function loadCSS(url) {
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = url;
+    document.head.appendChild(link);
+    // 返回link元素，以便可以删除
+    return link;
+}
+
+onMounted(() => {
+    loadJsRef.value = loadJS("http://169.254.96.39:8081/bundle.js");
+    loadCssRef.value = loadCSS("http://169.254.96.39:8081/main.css")
+})
+
 </script>
 
 <template>
@@ -24,30 +53,30 @@ watch(visible, (value, oldValue) => {
                 </el-space>
             </div>
         </template>
-        <iframe class="iframe" src="http://localhost:3000"></iframe>
+        <div id="ai_modal_content" class="ai-modal-content"></div>
     </el-dialog>
 </template>
 
 <style lang="less" scoped>
 @import '@/assets/styles/variables.less';
+
 .my-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     gap: 16px;
 }
-.iframe {
+
+.ai-modal-content::-webkit-scrollbar {
+    display: none;
+}
+
+.ai-modal-content {
     overflow: auto;
-    -webkit-user-select: none;
-    /* Safari */
-    -moz-user-select: none;
-    /* Firefox */
-    -ms-user-select: none;
-    /* IE10+/Edge */
-    user-select: none;
     /* Standard */
     width: 100%;
-    min-height: 30vh;
+    max-height: 50vh;
     border: 0;
+    scrollbar-width: none;
 }
 </style>

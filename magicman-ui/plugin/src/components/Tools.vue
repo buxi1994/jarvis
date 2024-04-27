@@ -33,34 +33,34 @@ async function getTools() {
     toolsList.value = formatTools(tools.value);
 }
 function clickHandle(type, description) {
-    // if (type == "link") {
-    //     window.open(description, '_blank');
-    // } else if (type == "modal") {
-    // 创建一个容器元素
-    const container = document.createElement('div');
-    container.setAttribute("style", "position: relative; z-index: 999999;");
-    document.body.appendChild(container);
-    // 创建Vue应用实例并挂载到容器，同时传递参数
-    const app = createApp({
-        render() {
-            return h(Dialog, {
-                // 传递事件处理器
-                closeHandle: () => {
-                    {
-                        // 当需要移除组件时
-                        app.unmount();
-                        document.body.removeChild(container);
+    if (type == "link") {
+        window.open(description, '_blank');
+    } else if (type == "modal") {
+        // 创建一个容器元素
+        const container = document.createElement('div');
+        container.setAttribute("style", "position: relative; z-index: 999999;");
+        document.body.appendChild(container);
+        // 创建Vue应用实例并挂载到容器，同时传递参数
+        const app = createApp({
+            render() {
+                return h(Dialog, {
+                    // 传递事件处理器
+                    closeHandle: () => {
+                        {
+                            // 当需要移除组件时
+                            app.unmount();
+                            document.body.removeChild(container);
+                        }
                     }
-                }
-            });
-        }
-    })
-    app.mount(container);
-    // }
+                });
+            }
+        })
+        app.mount(container);
+    }
 }
 
+// 移除modal
 function removeDomHandle() {
-    // 当需要移除组件时
     appendMountedApp.value.unmount();
     document.body.removeChild(appendDom.value);
 }
