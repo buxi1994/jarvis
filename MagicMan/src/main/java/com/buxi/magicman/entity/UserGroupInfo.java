@@ -8,21 +8,13 @@ import java.util.List;
 
 
 @Data
-public class ToolsInfo {
-    public static enum Type {
-        modal,
-        link,
-        recommend
-    }
-
+public class UserGroupInfo {
     @Data
     public static class Item {
         private long id;
         private String name;
+        private String creator;
         private String description;
-        private Type type;
-        private String imageUrl;
-        private String relation;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
         private Timestamp createTime;
     }
