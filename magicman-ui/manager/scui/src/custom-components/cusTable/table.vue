@@ -1,5 +1,5 @@
 <template>
-    <scTable ref="table" :apiObj="API" row-key="id" @selection-change="selectionChange(selection)" stripe>
+    <scTable ref="table" :params="tableParams" :apiObj="API" row-key="id" @selection-change="selectionChange(selection)" stripe>
         <template v-for="(item, index) in tableProps" :key="index">
             <el-table-column v-if="item.type == 'selection'" type="selection" :width="item.width"></el-table-column>
             <el-table-column v-else-if="item.type == 'img'" :label="item.label" :width="item.width">
@@ -35,6 +35,7 @@
 export default {
     props: {
         tableProps: { type: Object, default: () => { } },
+        tableParams: { type: Object, default: () => { } },
         API: { type: Object, default: () => { } },
         selectionChange: { type: Function, default: () => { } },
     },

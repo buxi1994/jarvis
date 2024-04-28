@@ -19,6 +19,8 @@ public class ToolsInfo {
     public static class Item {
         private long id;
         private String name;
+        private Long groupId;
+        private String groupName;
         private String description;
         private Type type;
         private String imageUrl;

@@ -32,7 +32,7 @@ async function getTools() {
     await getToolInfo();
     toolsList.value = formatTools(tools.value);
 }
-function clickHandle(type, description) {
+function clickHandle(type, description, name) {
     if (type == "link") {
         window.open(description, '_blank');
     } else if (type == "modal") {
@@ -44,6 +44,7 @@ function clickHandle(type, description) {
         const app = createApp({
             render() {
                 return h(Dialog, {
+                    title: name,
                     // 传递事件处理器
                     closeHandle: () => {
                         {
@@ -71,7 +72,7 @@ function removeDomHandle() {
         <div class="content">
             <div class="fixed-tools">
                 <div class="tool-item" v-for="{ name, imageUrl, type, description } in fixedTools"
-                    @click="clickHandle(type, description)">
+                    @click="clickHandle(type, description, name)">
                     <img :src="imageUrl" />
                     <span>
                         {{ name }}
@@ -80,7 +81,7 @@ function removeDomHandle() {
             </div>
             <div class="open-tools">
                 <div class="tool-item" v-for="{ name, imageUrl, type, description } in openTools"
-                    @click="clickHandle(type, description)">
+                    @click="clickHandle(type, description, name)">
                     <img :src="imageUrl" />
                     <span>
                         {{ name }}

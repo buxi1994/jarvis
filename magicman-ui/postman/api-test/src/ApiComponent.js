@@ -84,6 +84,9 @@ function ApiComponent() {
 
   const handleGet = async () => {
     try {
+      if(url.length === 0){
+        throw new Error("url为空");
+      }
       const result = await axios.get(url);
       setRequestBody("");
       setResponse(result.data);
@@ -94,6 +97,9 @@ function ApiComponent() {
 
   const handlePost = async () => {
     try {
+      if(url.length === 0){
+        throw new Error("url为空");
+      }
       const postData = parseKeyValueToObj(requestBody);
       const result = await axios.post(url, postData);
       setResponse(result.data);
@@ -104,6 +110,9 @@ function ApiComponent() {
 
   const handleDelete = async () => {
     try {
+      if(url.length === 0){
+        throw new Error("url为空");
+      }
       const result = await axios.delete(url);
       setRequestBody("");
       setResponse(result.data);
@@ -114,6 +123,9 @@ function ApiComponent() {
 
   const handlePut = async () => {
     try {
+      if(url.length === 0){
+        throw new Error("url为空");
+      }
       const putData = parseKeyValueToObj(requestBody);
       const result = await axios.put(url, putData);
       setResponse(result.data);

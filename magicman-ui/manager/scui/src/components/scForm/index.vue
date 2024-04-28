@@ -11,7 +11,7 @@
 	<el-skeleton v-if="renderLoading || Object.keys(form).length == 0" animated />
 
 	<el-form v-else ref="form" :rules="rules" :model="form" :label-width="config.labelWidth"
-		:label-position="config.labelPosition" v-loading="loading" element-loading-text="Loading...">
+		:label-position="config.labelPosition" element-loading-text="Loading...">
 		<el-row :gutter="15">
 			<template v-for="( item, index ) in  config.formItems " :key="index">
 				<el-col :span="item.span || 24" v-if="!hideHandle(item)">
@@ -25,8 +25,9 @@
 						</template>
 						<!-- input -->
 						<template v-if="item.component == 'input'">
-							<el-input v-model="form[item.name]" :disabled="item.options.disabled" :placeholder="item.options.placeholder" clearable
-								:maxlength="item.options.maxlength" show-word-limit></el-input>
+							<el-input v-model="form[item.name]" :disabled="item.options.disabled"
+								:placeholder="item.options.placeholder" clearable :maxlength="item.options.maxlength"
+								show-word-limit></el-input>
 						</template>
 						<!-- checkbox -->
 						<template v-else-if="item.component == 'checkbox'">
@@ -50,9 +51,8 @@
 						<template v-else-if="item.component == 'upload'">
 							<el-col v-for="( _item, _index ) in  item.options.items " :key="_index">
 								<el-form-item :prop="_item.name">
-									<sc-upload v-model="form[_item.name]" :cropper="_item.cropper"
-										:title="_item.label" :compress="_item.compress"
-										:aspectRatio="_item.aspectRatio"></sc-upload>
+									<sc-upload v-model="form[_item.name]" :cropper="_item.cropper" :title="_item.label"
+										:compress="_item.compress" :aspectRatio="_item.aspectRatio"></sc-upload>
 								</el-form-item>
 							</el-col>
 						</template>
@@ -65,7 +65,7 @@
 							<el-select v-model="form[item.name]" :multiple="item.options.multiple"
 								:placeholder="item.options.placeholder" clearable filterable style="width: 100%;">
 								<el-option v-for=" option  in  item.options.items " :key="option.value"
-									:label="option.label" :value="option.value"></el-option>
+									:label="option.name" :value="option.id"></el-option>
 							</el-select>
 						</template>
 						<!-- cascader -->
@@ -110,7 +110,8 @@
 						</template>
 						<!-- editor -->
 						<template v-else-if="item.component == 'editor'">
-							<sc-editor v-model="form[item.name]" :toolbar="toolbar" placeholder="请输入" :disabled="item.disabled" :height="400" width="100%"></sc-editor>
+							<sc-editor v-model="form[item.name]" :toolbar="toolbar" placeholder="请输入"
+								:disabled="item.disabled" :height="400" width="100%"></sc-editor>
 						</template>
 						<!-- noComponent -->
 						<template v-else>
@@ -142,7 +143,6 @@ export default {
 	props: {
 		modelValue: { type: Object, default: () => { } },
 		config: { type: Object, default: () => { } },
-		loading: { type: Boolean, default: false },
 	},
 	components: {
 		tableselectRender,
@@ -154,7 +154,7 @@ export default {
 			form: {},
 			renderLoading: false,
 			// 自定义工具栏，使用"|"竖杠分割，使用"\"斜杠分组
-            toolbar: 'undo redo |  forecolor backcolor bold italic underline strikethrough link | formatselect fontselect fontsizeselect | \
+			toolbar: 'undo redo |  forecolor backcolor bold italic underline strikethrough link | formatselect fontselect fontsizeselect | \
  alignleft aligncenter alignright alignjustify outdent indent lineheight | bullist numlist | \
  image preview | code selectall',
 		}
@@ -192,8 +192,6 @@ export default {
 		//构建form对象
 		render() {
 			this.config.formItems.forEach((item) => {
-
-
 				if (item.component == 'checkbox') {
 					if (item.name) {
 						const value = {}
@@ -243,7 +241,7 @@ export default {
 			this.config.formItems.forEach((item) => {
 				if (item.options && item.options.remote) {
 					var req = http.get(item.options.remote.api, item.options.remote.data).then(res => {
-						item.options.items = res.data
+						item.options.items = res.data.dataList || res.data
 					})
 					remoteData.push(req)
 				}
@@ -283,8 +281,6 @@ export default {
 		// },
 		//数据验证
 		validate(valid, obj) {
-			// eslint-disable-next-line
-			debugger;
 			return this.$refs.form.validate(valid, obj)
 		},
 		scrollToField(prop) {

@@ -1,5 +1,5 @@
 <template>
-    <cus-table :tableProps="tableProps" :API="API" :formItems="formItems"></cus-table>
+    <cus-table :tableProps="tableProps" :filterOptions="filterOptions" :API="API" :formItems="formItems"></cus-table>
 </template>
 
 <script>
@@ -33,18 +33,40 @@ export default {
                     options: {
                         items: [
                             {
-                                label: "action",
-                                value: "action"
+                                label: "链接跳转",
+                                value: "link"
                             },
                             {
-                                label: "link",
-                                value: "link"
+                                label: "弹窗",
+                                value: "modal"
                             }
                         ]
                     },
                     rules: [
                         { required: true }
                     ],
+                }, {
+                    label: "群组",
+                    name: "groupId",
+                    value: "",
+                    component: "select",
+                    options: {
+                        remote: {
+                            api: "https://localhost:8090/magicman/scene/group/info",
+                            data: {}
+                        },
+                        addDataToForm: (curConfig, form) => {
+                            if (curConfig.name === "groupId" && curConfig.label === "群组") {
+                                const items = curConfig.options.items;
+                                for (const item of items) {
+                                    if (item.id === form.groupId) {
+                                        form.groupName = item.name;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    },
                 },
                 {
                     label: "描述",
@@ -73,7 +95,7 @@ export default {
                 {
                     label: "图标",
                     component: "upload",
-                    name:"icon",
+                    name: "icon",
                     options: {
                         items: [
                             {
@@ -100,38 +122,60 @@ export default {
             }, {
                 prop: "name",
                 label: "名称",
-                width: 150,
             }, {
                 prop: "imageUrl",
                 type: "img",
                 label: "图标",
-                width: 150,
             }, {
                 prop: "type",
                 label: "类型",
                 type: "filter",
-                width: 150,
                 typeFilters: [
-                    { text: '链接', value: 'link' },
-                    { text: '动作', value: 'action' }
+                    { text: '链接跳转', value: 'link' },
+                    { text: '弹窗', value: 'modal' }
                 ],
-                options:{
-                    "link":"链接",
-                    "action":"动作"
+                options: {
+                    "link": "链接跳转",
+                    "modal": "弹窗"
                 }
             }, {
                 prop: "relation",
                 label: "关联网址",
-                width: 250,
+            }, {
+                prop: "groupName",
+                label: "群组",
             }, {
                 prop: "description",
                 label: "说明",
-                width: 250,
             }, {
                 prop: "createTime",
                 label: "修改时间",
-                width: 150
-            }]
+            }],
+            filterOptions: [
+                {
+                    label: '群组',
+                    value: 'groupId',
+                    type: 'select',
+                    placeholder: '选择群组',
+                    clearable: true,
+                    extend: {
+                        request: async () => {
+                            try {
+                                let list = await this.$API.demo.group.get();
+                                let data = list.data && list.data.dataList;
+                                return data.map(item => {
+                                    return {
+                                        label: item.name,
+                                        value: item.id
+                                    }
+                                })
+                            } catch (error) {
+                                return {};
+                            }
+                        }
+                    }
+                },
+            ]
         }
     }
 }

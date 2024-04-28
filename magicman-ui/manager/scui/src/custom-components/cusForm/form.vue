@@ -1,5 +1,5 @@
 <template>
-    <sc-form ref="formref" :config="config" v-model="form" :loading="loading">
+    <sc-form ref="formref" :config="config" v-model="form">
         <el-button @click="cancelHandle">取 消</el-button>
         <el-button type="primary" :loading="isSaveing" @click="submit">保 存</el-button>
     </sc-form>
@@ -34,6 +34,15 @@ export default {
             this.$refs.formref.validate(async (valid, obj) => {
                 if (valid) {
                     this.isSaveing = true;
+                    // 适用于Select功能，将key-value都提交的情况
+                    if (this.config.formItems) {
+                        for (const iterator of this.config.formItems) {
+                            const addDataToForm = iterator.options && iterator.options.addDataToForm;
+                            if (addDataToForm && typeof addDataToForm === "function") {
+                                addDataToForm(iterator,this.form);
+                            }
+                        }
+                    }
                     try {
                         if (Object.keys(this.data).length == 0) {
                             await this.API.add(this.form);
@@ -43,8 +52,9 @@ export default {
                         this.isSaveing = false;
                         this.reset();
                         this.$message.success("提交成功");
-                        this.$nextTick(()=>{
-                            this.$emit("cancel");
+                        this.$nextTick(() => {
+                            // 第二个参数为true，代表提交成功后需要刷新数据
+                            this.$emit("cancel", true);
                         })
                     } catch (error) {
                         this.$message.warning(error ? error.statusText : "提交失败");
@@ -56,13 +66,7 @@ export default {
             })
         },
         reset() {
-            this.$refs.formref.resetFields()
-        },
-        //表单注入数据
-        setData(data) {
-            if (data) {
-                this.form = data;
-            }
+            return this.$refs.formref.resetFields();
         },
     }
 }</script>

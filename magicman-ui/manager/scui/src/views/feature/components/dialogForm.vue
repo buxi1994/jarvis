@@ -1,6 +1,6 @@
 <template>
     <cus-dialog ref="dialog">
-        <cus-form ref="form" :API="API" :config="config" :data="form" @cancel="cancelFormHandle"></cus-form>
+        <cus-form ref="form" :API="API" :config="config" :data="data" @cancel="cancelFormHandle"></cus-form>
     </cus-dialog>
 </template>
 
@@ -16,6 +16,7 @@ export default {
     props: {
         formItems: { type: Object, default: () => { } },
         API: { type: Object, default: () => { } },
+        refreshTable: { type: Object, default: () => { } },
     },
     data() {
         return {
@@ -26,16 +27,19 @@ export default {
                 size: 'medium',
                 formItems: []
             },
-            form: {}
+            data: {},
         }
     },
     created() {
         this.config.formItems = this.formItems;
     },
     methods: {
-        cancelFormHandle() {
+        cancelFormHandle(status) {
             this.hide();
             this.reset();
+            if (status) {
+                this.$emit("refreshTable")
+            }
         },
         //弹窗显示
         open(title) {
@@ -53,9 +57,7 @@ export default {
         },
         //表单注入数据
         setData(data) {
-            this.$nextTick(() => {
-                this.$refs.form.setData(data);
-            });
+            this.data = data
         },
     }
 }</script>

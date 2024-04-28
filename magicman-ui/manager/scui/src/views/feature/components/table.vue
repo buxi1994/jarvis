@@ -8,35 +8,53 @@
 				<el-button type="danger" plain icon="el-icon-delete" :disabled="selection.length == 0"
 					@click="delTools"></el-button>
 			</div>
+			<div class="right-panel" v-if="filterOptions.length>0">
+				<cus-filterBar :options="filterOptions" @filterChange="change">
+					<template #default="{ filterLength, openFilter }">
+						<el-badge :value="filterLength" type="danger" :hidden="filterLength <= 0">
+							<el-button icon="el-icon-filter" @click="openFilter"></el-button>
+						</el-badge>
+					</template>
+				</cus-filterBar>
+			</div>
 		</el-header>
 		<el-main class="nopadding">
-			<cus-table ref="table" :tableProps="this.tableProps" :API="this.API" @selectionChange="selectionChange"></cus-table>
+			<cus-table ref="table" :tableProps="tableProps" :API="API" :tableParams="filterData"
+				@selectionChange="selectionChange"></cus-table>
 		</el-main>
-		<dialog-form :formItems="formItems" ref="dialog" :API="API"/>
+		<dialog-form :formItems="formItems" ref="dialog" :API="API" @refreshTable="refreshTools" />
 	</el-container>
 </template>
 
 <script>
 import dialogForm from "./dialogForm.vue";
 import cusTable from "@/custom-components/cusTable/table.vue";
+import cusFilterBar from '@/custom-components/cusFilterBar/filterBar.vue';
 
 export default {
 	name: 'tableBase',
 	components: {
 		dialogForm,
-		cusTable
+		cusTable,
+		cusFilterBar
 	},
 	props: {
 		tableProps: { type: Object, default: () => { } },
 		API: { type: Object, default: () => { } },
 		formItems: { type: Object, default: () => { } },
+		filterOptions: { type: Array, default: ()=>[] },
 	},
 	data() {
 		return {
 			selection: [],
+			filterData: {},			
 		}
 	},
 	methods: {
+		change(data) {
+			this.filterData = data;
+			this.reload(data);
+		},
 		filterHandler(value, row, column) {
 			const property = column['property']
 			return row[property] === value
@@ -70,17 +88,18 @@ export default {
 		},
 		//增加
 		addTool() {
-			this.$nextTick(() => {
-				this.$refs.dialog.open();
-			})
+			this.$refs.dialog.open("新增").setData({});
 		},
 		//编辑
 		editTool() {
 			if (this.selection.length == 1) {
 				let rowData = this.selection[0];
-				this.$nextTick(() => {
-					this.$refs.dialog.open('编辑').setData(rowData);
-				})
+				let dom = this.$refs.dialog.open('编辑');
+				// 增加延迟是为了解决如下链接bug 
+				// https://github.com/element-plus/element-plus/issues/13299
+				setTimeout(() => {
+					dom.setData(rowData);
+				}, 200);
 			}
 		},
 		// 获取列表

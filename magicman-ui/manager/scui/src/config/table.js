@@ -10,7 +10,7 @@ export default {
 	parseData: function (res) {	
 		//数据分析
 		// TODO
-		console.log("==="+res);
+		console.log(res);
 		return {
 			data: res.data,				//分析无分页的数据字段结构
 			rows: res.data.rows || res.data.dataList,		//分析行数据字段结构

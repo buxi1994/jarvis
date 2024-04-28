@@ -31,15 +31,19 @@ public class ToolsInfoController {
 
     @GetMapping("/toolsinfo")
     // public ToolsInfo queryToolsInfo(@Param("page") int page,@Param("pageSize") int pageSize) {
-    public ToolsInfo queryToolsInfo(@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer pageSize,@RequestParam(required = true) String type,@RequestParam(required = false) String relation) throws MalformedURLException {
+    public ToolsInfo queryToolsInfo(@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer pageSize,@RequestParam(required = true) String type,@RequestParam(required = false) String relation,@RequestParam(required = false) String groupId) throws MalformedURLException {
         String newRelation = "";
+        Long userGroupId = null;
+        if(groupId != null && !groupId.isEmpty()){
+            userGroupId =  Long.parseLong(groupId);
+        }
         if (relation != null) {
             URL url = new URL(relation);
             String authority = url.getAuthority();
             String path = url.getPath();
             newRelation = authority + path;
         }
-        int total = toolsInfoMapper.queryAllToolsSummary(type);
+        int total = toolsInfoMapper.queryAllToolsSummary(type,userGroupId);
         if (page == null) {
             page = 1;
         }
@@ -48,10 +52,10 @@ public class ToolsInfoController {
         }
         int startIndex = (page-1)* pageSize;
         List<ToolsInfo.Item> list;
-        list = toolsInfoMapper.queryAllToolsInfo(startIndex,pageSize,type,newRelation);
+        list = toolsInfoMapper.queryAllToolsInfo(startIndex,pageSize,type,newRelation,userGroupId);
         if (list.size() == 0 && page != 1) {
             page = 1;
-            list = toolsInfoMapper.queryAllToolsInfo(0,pageSize,type,newRelation);
+            list = toolsInfoMapper.queryAllToolsInfo(0,pageSize,type,newRelation,userGroupId);
         }
         ToolsInfo toolsInfo = new ToolsInfo();
         toolsInfo.setDataList(list);
@@ -64,12 +68,12 @@ public class ToolsInfoController {
     @PostMapping("/add/tool")
     public boolean addTool(@RequestBody ToolsInfo.Item requestBody) {
         String imageUrl = requestBody.getImageUrl() != null ? requestBody.getImageUrl() : null;
-        return toolsInfoMapper.addTool(requestBody.getName(), requestBody.getDescription(), requestBody.getType(),imageUrl,requestBody.getRelation() );
+        return toolsInfoMapper.addTool(requestBody.getName(), requestBody.getDescription(), requestBody.getType(),imageUrl,requestBody.getRelation(),requestBody.getGroupId() );
     }
 
     @PostMapping("/update/tool")
     public boolean updateTool(@RequestBody ToolsInfo.Item requestBody) {
-        return toolsInfoMapper.updateTool(requestBody.getName(), requestBody.getDescription(), requestBody.getType(), requestBody.getImageUrl(),requestBody.getId(),requestBody.getRelation());
+        return toolsInfoMapper.updateTool(requestBody.getName(), requestBody.getDescription(), requestBody.getType(), requestBody.getImageUrl(),requestBody.getId(),requestBody.getRelation(),requestBody.getGroupId());
     }
 
     @DeleteMapping("/delete/tools")

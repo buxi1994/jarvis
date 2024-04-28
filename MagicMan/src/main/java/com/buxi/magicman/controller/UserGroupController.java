@@ -1,5 +1,6 @@
 package com.buxi.magicman.controller;
 
+import com.buxi.magicman.database.mapper.ToolsInfoMapper;
 import com.buxi.magicman.database.mapper.UserGroupInfoMapper;
 import com.buxi.magicman.entity.UserGroupInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import java.util.stream.Collectors;
 public class UserGroupController {
     @Autowired
     private UserGroupInfoMapper userGroupInfoMapper;
+    @Autowired
+    private ToolsInfoMapper toolsInfoMapper;
 
     @GetMapping("/group/info")
     public UserGroupInfo queryUserGroup(@RequestParam(required = false,defaultValue= "1") Integer page, @RequestParam(required = false) Integer pageSize) throws MalformedURLException {
@@ -52,6 +55,7 @@ public class UserGroupController {
                 .collect(Collectors.joining(","));
         List<UserGroupInfo.Item> items = userGroupInfoMapper.queryUserGroupByIds(idListStr);
         boolean deleted = userGroupInfoMapper.deleteUserGroupByIds(idListStr);
+        toolsInfoMapper.resetToolsGroupId(idListStr);
         return deleted;
     }
 }

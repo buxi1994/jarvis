@@ -4,7 +4,7 @@
 	.el-form-item__label {display: block;text-align: left;padding: 0 0 10px;}
 	.el-dialog {width: 90%!important;}
 	.el-dialog.is-fullscreen {width: 100%!important;}
-	.el-drawer.rtl {width: 90%!important;}
+	.el-drawer.rtl {width: 70%!important;}
 	.el-form-item__content {margin-left: 0px!important;}
 
 	.adminui-main {
@@ -25,7 +25,7 @@
 		height: auto!important;display: block;
 		.left-panel {overflow: auto;}
 		.left-panel::-webkit-scrollbar{display: none;}
-		.right-panel {display: block;border-top: 1px solid var(--el-border-color-light);margin-top: 15px;}
+		.right-panel {display: block;border-top: 1px solid var(--el-border-color-light);margin-top: 15px;padding-top: 15px}
 		.right-panel .right-panel-search {display: block;}
 		.right-panel .right-panel-search >* {width: 100%;margin: 0;margin-top: 15px;}
 	}

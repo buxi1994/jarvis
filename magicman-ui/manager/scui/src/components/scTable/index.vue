@@ -97,8 +97,6 @@
 		watch: {
 			//监听从props里拿到值了
 			data(){
-				// eslint-disable-next-line
-				debugger;
 				this.tableData = this.data;
 				this.total = this.tableData.length;
 			},
@@ -243,6 +241,8 @@
 			},
 			//更新数据 合并上一次params
 			upData(params, page=1){
+				// eslint-disable-next-line
+				debugger;
 				this.currentPage = page;
 				this.$refs.scTable.clearSelection();
 				Object.assign(this.tableParams, params || {})
@@ -251,6 +251,8 @@
 			//重载数据 替换params
 			reload(params, page=1){
 				this.currentPage = page;
+				// eslint-disable-next-line
+				debugger;
 				this.tableParams = params || {}
 				this.$refs.scTable.clearSelection();
 				this.$refs.scTable.clearSort()

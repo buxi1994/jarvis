@@ -7,8 +7,6 @@ export default {
 		url: `https://localhost:8090/magicman/scene/upload/tool/icon`,
 		name: "文件上传",
 		post: async function(data, config={}){
-			// eslint-disable-next-line
-			debugger;
 			return await http.post(this.url, data, config);
 		}
 	},

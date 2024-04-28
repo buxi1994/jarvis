@@ -95,8 +95,6 @@
 						alert(123);
 						return new Promise((resolve, reject) => {
 							const data = new FormData();
-							// eslint-disable-next-line
-							debugger;
 							data.append("file", blobInfo.blob() ,blobInfo.filename());
 							API.common.upload.post(data).then((res) => {
 								resolve(res.data.src)

@@ -2,7 +2,7 @@
 import { watch, ref } from "vue";
 import 'element-plus/es/components/dialog/style/css';
 
-const props = defineProps(['closeHandle']);
+const props = defineProps(['closeHandle','title']);
 const visible = ref(true);
 const fullscreen = ref(false);
 const loadJsRef = ref();
@@ -46,7 +46,7 @@ onMounted(() => {
         <el-dialog v-model="visible" :fullscreen="fullscreen" :show-close="false" width="800">
             <template #header="{ close, titleId, titleClass }">
                 <div class="my-header">
-                    <div :id="titleId" :class="titleClass">待更新 。。。</div>
+                    <div :id="titleId" :class="titleClass">{{title}}</div>
                     <el-space size="8">
                         <i-ep-full-screen v-if="!fullscreen" @click="fullscreen = true" />
                         <i-ep-aim v-if="fullscreen" @click="fullscreen = false" />

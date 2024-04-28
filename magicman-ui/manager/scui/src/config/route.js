@@ -44,6 +44,16 @@ const routes = [
 				},
 				component: "feature/recommend",
 			},
+			{
+				name: "group",
+				path: "/feature/group",
+				meta: {
+					title: "群组",
+					icon: "el-icon-setting",
+					affix: true,
+				},
+				component: "feature/group",
+			}
 		],
 	},
 	{
