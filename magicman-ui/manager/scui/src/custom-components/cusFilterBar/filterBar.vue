@@ -1,5 +1,5 @@
 <template>
-	<div class="sc-filterBar">
+	<div>
 		<slot :filterLength="filterObjLength" :openFilter="openFilter">
 			<el-badge :value="filterObjLength" type="danger" :hidden="filterObjLength <= 0">
 				<el-button icon="el-icon-filter" @click="openFilter"></el-button>

@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            API: this.$API.demo.tools,
+            API: this.$API.tools,
             formItems: [
                 {
                     label: "名称",
@@ -161,7 +161,7 @@ export default {
                     extend: {
                         request: async () => {
                             try {
-                                let list = await this.$API.demo.group.get();
+                                let list = await this.$API.group.get();
                                 let data = list.data && list.data.dataList;
                                 return data.map(item => {
                                     return {

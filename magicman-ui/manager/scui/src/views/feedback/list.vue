@@ -38,7 +38,7 @@ export default {
             content: "",
             groupId: "all",
             selection: [],
-            API: this.$API.demo.feedback,
+            API: this.$API.feedback,
             tableProps: [{
                 type: "selection",
                 width: 50,

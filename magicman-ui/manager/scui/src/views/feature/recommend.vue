@@ -11,7 +11,7 @@ export default {
 	},
 	data() {
 		return {
-			API: this.$API.demo.recommend,
+			API: this.$API.recommend,
 			formItems: [
 				{
 					label: "名称",
@@ -126,7 +126,7 @@ export default {
 					extend: {
 						request: async () => {
 							try {
-								let list = await this.$API.demo.group.get();
+								let list = await this.$API.group.get();
 								let data = list.data && list.data.dataList;
 								return data.map(item => {
 									return {

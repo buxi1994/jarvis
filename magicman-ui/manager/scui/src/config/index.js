@@ -11,15 +11,18 @@ const DEFAULT_CONFIG = {
 	// 当前进度
 	PROGRESS: 5,
 
+	// TODO 修改地址
 	//接口地址
 	API_URL: process.env.NODE_ENV === 'development' && process.env.VUE_APP_PROXY === 'true' ? "/api" : process.env.VUE_APP_API_BASEURL,
 
 	//请求超时
 	TIMEOUT: 10000,
 
+	// TODO 确认是否需要
 	//TokenName
 	TOKEN_NAME: "Authorization",
 
+	// TODO 确认是否需要
 	//Token前缀，注意最后有个空格，如不需要需设置空字符串
 	TOKEN_PREFIX: "Bearer ",
 
@@ -35,6 +38,7 @@ const DEFAULT_CONFIG = {
 
 	//菜单是否折叠
 	MENU_IS_COLLAPSE: false,
+
 
 	//菜单是否启用手风琴效果
 	MENU_UNIQUE_OPENED: false,
@@ -76,10 +80,6 @@ const DEFAULT_CONFIG = {
 		"user.delete",
 	],
 }
-
-//合并业务配置
-import MY_CONFIG from "./myConfig"
-Object.assign(DEFAULT_CONFIG, MY_CONFIG)
 
 // 如果生产模式，就合并动态的APP_CONFIG
 // public/config.js

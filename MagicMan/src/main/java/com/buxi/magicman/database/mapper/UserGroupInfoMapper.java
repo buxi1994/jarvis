@@ -18,7 +18,7 @@ public interface UserGroupInfoMapper {
     boolean submitUserGroup(@Param("name") String name, @Param("creator") String creator, @Param("description") String description);
 
     @Update("UPDATE user_group SET name = #{name}, creator = #{creator}, description = #{description} WHERE id = #{id};")
-    boolean updateUserGroup(@Param("id") long id, @Param("creator") String creator, @Param("description") String description);
+    boolean updateUserGroup(@Param("id") long id, @Param("name") String name, @Param("creator") String creator, @Param("description") String description);
 
     @Select("SELECT * FROM user_group WHERE id IN (${idListStr})")
     List<UserGroupInfo.Item> queryUserGroupByIds(@Param("idListStr") String idListStr);

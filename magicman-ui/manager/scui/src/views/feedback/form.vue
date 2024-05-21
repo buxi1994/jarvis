@@ -17,7 +17,7 @@ export default {
         return {
             formData: {},
             isSaveing: false,
-            API: this.$API.demo.feedback,
+            API: this.$API.feedback,
         }
     },
     created() {

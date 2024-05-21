@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            API: this.$API.demo.group,
+            API: this.$API.group,
             formItems: [
                 {
                     label: "组名",

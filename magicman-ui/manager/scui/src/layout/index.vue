@@ -181,13 +181,6 @@
 	</template>
 
 	<div class="main-maximize-exit" @click="exitMaximize"><el-icon><el-icon-close /></el-icon></div>
-
-	<!-- <div class="layout-setting" @click="openSetting"><el-icon><el-icon-brush-filled /></el-icon></div> -->
-
-	<!-- <el-drawer title="布局实时演示" v-model="settingDialog" :size="400" append-to-body destroy-on-close>
-		<setting></setting>
-	</el-drawer> -->
-
 	<auto-exit></auto-exit>
 </template>
 
@@ -197,8 +190,6 @@
 	import Tags from './components/tags.vue';
 	import NavMenu from './components/NavMenu.vue';
 	import userbar from './components/userbar.vue';
-	import setting from './components/setting.vue';
-	import iframeView from './components/iframeView.vue';
 	import autoExit from './other/autoExit.js';
 
 	export default {
@@ -209,13 +200,10 @@
 			Tags,
 			NavMenu,
 			userbar,
-			setting,
-			iframeView,
 			autoExit
 		},
 		data() {
 			return {
-				settingDialog: false,
 				menu: [],
 				nextMenu: [],
 				pmenu: {},
@@ -255,9 +243,6 @@
 			}
 		},
 		methods: {
-			// openSetting(){
-			// 	this.settingDialog = true;
-			// },
 			onLayoutResize(){
 				this.$store.commit("SET_ismobile", document.body.clientWidth < 992)
 			},

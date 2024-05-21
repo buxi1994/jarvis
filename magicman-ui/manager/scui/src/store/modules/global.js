@@ -10,6 +10,7 @@ export default {
 		menuIsCollapse: config.MENU_IS_COLLAPSE,
 		//多标签栏
 		layoutTags: config.LAYOUT_TAGS,
+		// TODO 确认主题是否是无用属性
 		//主题
 		theme: config.THEME,
 	},

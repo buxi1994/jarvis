@@ -278,6 +278,8 @@
 			},
 			//自定义列重置
 			async columnSettingBack(){
+				// eslint-disable-next-line
+				debugger
 				this.$refs.columnSetting.isSave = true
 				try {
 					const column = await config.columnSettingReset(this.tableName, this.column)

@@ -28,7 +28,6 @@ export default {
 		resetFeedback(state) {
 			console.log('===='+JSON.stringify(defaultData));
 			state.data=defaultData;
-			// Object.assign(state.data, defaultData);
 		},
 	},
 };

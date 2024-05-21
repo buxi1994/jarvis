@@ -16,20 +16,6 @@ const routes = [
 			title: "登录"
 		}
 	},
-	// {
-	// 	path: "/user_register",
-	// 	component: () => import(/* webpackChunkName: "userRegister" */ '@/views/login/userRegister'),
-	// 	meta: {
-	// 		title: "注册"
-	// 	}
-	// },
-	// {
-	// 	path: "/reset_password",
-	// 	component: () => import(/* webpackChunkName: "resetPassword" */ '@/views/login/resetPassword'),
-	// 	meta: {
-	// 		title: "重置密码"
-	// 	}
-	// }
 ]
 
 export default routes;

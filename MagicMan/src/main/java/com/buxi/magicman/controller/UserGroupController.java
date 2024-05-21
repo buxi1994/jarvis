@@ -45,7 +45,7 @@ public class UserGroupController {
 
     @PostMapping("/update/group")
     public Boolean updateUserGroup(@RequestBody UserGroupInfo.Item requestBody){
-        return userGroupInfoMapper.updateUserGroup(requestBody.getId(), requestBody.getCreator(), requestBody.getDescription());
+        return userGroupInfoMapper.updateUserGroup(requestBody.getId(), requestBody.getName(),requestBody.getCreator(), requestBody.getDescription());
     }
 
     @DeleteMapping("/delete/group")
